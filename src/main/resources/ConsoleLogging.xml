@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property resource="./application.properties" />
+	<property name="SERVICE_NAME" value="${spring.application.name}" />
+	<property name="SEPARATOR" value="|" />
+
+	<!-- Log message format for Console-->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{dd MMM yyyy HH:mm:ss.SSS, Asia/Kolkata} ${SEPARATOR} ${SERVICE_NAME} ${SEPARATOR} %thread ${SEPARATOR} %highlight(%5p) ${SEPARATOR} %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Level : TRACE	> DEBUG > INFO > WARN > ERROR -->
+	<logger name="Service-Application" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="Service-Exception" level="TRACE" additivity="false">
+        <appender-ref ref="STDOUT" />
+	</logger>
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

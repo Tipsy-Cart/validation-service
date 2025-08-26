@@ -1,0 +1,112 @@
+package com.covoro.validationservice.handler;
+
+import com.covoro.validationservice.bean.JsonHelper;
+import com.covoro.validationservice.bean.ValidationError;
+import com.covoro.validationservice.bean.ValidationResult;
+import com.covoro.validationservice.constant.ValidationServiceError;
+import com.covoro.validationservice.exception.ValidationServiceException;
+import com.covoro.validationservice.helper.JsonSchemaManager;
+import com.covoro.validationservice.helper.KieBaseManager;
+import com.covoro.validationservice.logging.Logger;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.ValidationMessage;
+import org.kie.api.KieBase;
+import org.kie.api.runtime.KieSession;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+@Service
+public class ValidationHandler {
+
+    private final Logger logger;
+    private final JsonSchemaManager jsonSchemaManager;
+    private final KieBaseManager kieBaseManager;
+    private static final Pattern ARRAY_INDEX_PATTERN = Pattern.compile("\\[(\\d+)\\]");
+
+    public ValidationHandler(Logger logger, JsonSchemaManager jsonSchemaManager, KieBaseManager kieBaseManager) {
+        this.logger = logger;
+        this.jsonSchemaManager = jsonSchemaManager;
+        this.kieBaseManager = kieBaseManager;
+    }
+
+    public Map<String, String> validateJson(String id, String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = mapper.readTree(mapper.writeValueAsString(json));
+        } catch (JsonProcessingException e) {
+            logger.trace("Exception While Creating JsonNode from Json String", e);
+            throw new ValidationServiceException(ValidationServiceError.VALIDATION_SERVICE_EXCEPTION, e.getMessage());
+        }
+        JsonSchema schema = jsonSchemaManager.getSchema(id);
+        Set<ValidationMessage> validationMessages = schema.validate(jsonNode);
+        return this.beautifyMessage(validationMessages, jsonSchemaManager.getSchemaError(id));
+    }
+
+    public Map<String, String> validateDrool(String id, List<String> groups, String json) {
+        ValidationResult results = new ValidationResult();
+        Configuration config = Configuration.builder()
+                .options(Option.SUPPRESS_EXCEPTIONS)
+                .build();
+        KieBase kieBase = kieBaseManager.get(id);
+        KieSession kieSession = kieBase.newKieSession();
+        kieSession.setGlobal("results", results);
+        kieSession.setGlobal("jsonHelper", new JsonHelper());
+        DocumentContext invoiceCtx = JsonPath.using(config).parse(json);
+        kieSession.insert(invoiceCtx);
+        if(null != groups && !groups.isEmpty()){
+            for(int i = 0; i < groups.size(); i++){
+                kieSession.getAgenda().getAgendaGroup(groups.get(i)).setFocus();
+                kieSession.fireAllRules();
+                if(!results.get().isEmpty()){
+                    kieSession.dispose();
+                    break;
+                }
+            }
+        }
+        return results.get().stream().collect(Collectors.toMap(ValidationError::getField, ValidationError::getMessage));
+    }
+
+    private Map<String, String> beautifyMessage(Set<ValidationMessage> validationMessages, Map<String, ValidationError> errorMap) {
+        Map<String, String> errors = new HashMap<>();
+        validationMessages.forEach(vm -> {
+            String location = vm.getInstanceLocation().toString();
+            String property = vm.getProperty();
+            String type = vm.getType();
+            property = null != property ? "." + property : "";
+            String errorKey = location + property + "|" + type;
+            System.out.println(errorKey);
+            Matcher matcher = ARRAY_INDEX_PATTERN.matcher(errorKey);
+            List<Integer> indices = new ArrayList<>();
+            while (matcher.find()) {
+                indices.add(Integer.parseInt(matcher.group(1)));
+            }
+            if(indices.isEmpty()){
+                ValidationError validationError = errorMap.get(errorKey);
+                if(null != validationError){
+                    errors.put(validationError.getField(), validationError.getMessage());
+                }
+            } else {
+                String path = errorKey.replaceAll("\\[\\d+\\]", "[%d]");
+                ValidationError validationError = errorMap.get(path);
+                if(null != validationError){
+                    errors.put(String.format(validationError.getField(), indices.toArray()), validationError.getMessage());
+                }
+            }
+        });
+        return errors;
+    }
+}

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property resource="./application.properties" />
+	<property name="SERVICE_NAME" value="${spring.application.name}" />
+	<property name="LOG_PATH" value="${log.file.path}" />
+	<property name="LOG_HOME" value="${LOG_PATH}/${SERVICE_NAME}" />
+	<property name="SEPARATOR" value="|" />
+	<property name="LOG_PATTERN" value="%d{dd MMM yyyy HH:mm:ss.SSS, Asia/Kolkata} ${SEPARATOR} ${SERVICE_NAME} ${SEPARATOR} %thread ${SEPARATOR} %5p ${SEPARATOR} %msg%n" />
+
+	<!-- Application logging -->
+	<appender name="APP" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${SERVICE_NAME}_app_log.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/archived/%d{dd-MMM-yyyy}/${SERVICE_NAME}_app_log%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+		</rollingPolicy>
+	</appender>
+	<appender name="ASYNC_APP" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>5000</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<appender-ref ref="APP" />
+	</appender>
+
+	<!-- Exception logging -->
+	<appender name="EXC" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${SERVICE_NAME}_exc_log.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/archived/%d{dd-MMM-yyyy}/${SERVICE_NAME}_exc_log%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+		</rollingPolicy>
+	</appender>
+	<appender name="ASYNC_EXC" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>5000</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<appender-ref ref="EXC" />
+	</appender>
+
+	<!-- Root logging -->
+	<appender name="ROOT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${SERVICE_NAME}_root_log.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/archived/%d{dd-MMM-yyyy}/${SERVICE_NAME}_root_log%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+		</rollingPolicy>
+	</appender>
+	<appender name="ASYNC_ROOT" class="ch.qos.logback.classic.AsyncAppender">
+		<queueSize>5000</queueSize>
+		<discardingThreshold>0</discardingThreshold>
+		<appender-ref ref="ROOT" />
+	</appender>
+
+	<!-- Level : TRACE	> DEBUG > INFO > WARN > ERROR -->
+	<logger name="Service-Application" level="DEBUG" additivity="false">
+		<appender-ref ref="ASYNC_APP" />
+	</logger>
+	<logger name="Service-Exception" level="TRACE" additivity="false">
+		<appender-ref ref="ASYNC_EXC" />
+	</logger>
+	<root level="INFO">
+		<appender-ref ref="ASYNC_ROOT" />
+	</root>
+</configuration>

@@ -1,0 +1,29 @@
+package com.covoro.validationservice.bean.ublxmlbeans;
+
+import com.covoro.validationservice.constant.Namespaces;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "PartyName", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+public class PartyName {
+
+    @JacksonXmlProperty(localName = "Name", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    @XmlElement(name = "Name", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    private String name;
+
+}

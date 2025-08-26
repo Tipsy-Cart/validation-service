@@ -1,0 +1,33 @@
+package com.covoro.validationservice.bean.ublxmlbeans;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.covoro.validationservice.constant.Namespaces;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+ * <h1>Accounting Supplier Party</h1>
+ * This class represents the accounting supplier party associated with an invoice.
+ * It contains a field for the party details.
+ */
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "AccountingSupplierParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+public class AccountingSupplierParty {
+
+    @JacksonXmlProperty(localName = "Party", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    @XmlElement(name = "Party", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    private Party party;
+
+}
