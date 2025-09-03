@@ -1,0 +1,9 @@
+{
+  "$id": "ItemType.json",
+  "type": "string",
+  "enum": [
+    "G",
+    "S",
+    "B"
+  ]
+}

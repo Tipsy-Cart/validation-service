@@ -1,0 +1,12 @@
+{
+  "$id": "InvoiceTypeCode.json",
+  "type": "string",
+  "enum": [
+    "380",
+    "480",
+    "381",
+    "81",
+    "389",
+    "261"
+  ]
+}

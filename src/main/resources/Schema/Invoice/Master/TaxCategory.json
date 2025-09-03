@@ -1,0 +1,12 @@
+{
+  "$id": "TaxCategory.json",
+  "type": "string",
+  "enum": [
+    "S",
+    "E",
+    "O",
+    "AE",
+    "Z",
+    "N"
+  ]
+}

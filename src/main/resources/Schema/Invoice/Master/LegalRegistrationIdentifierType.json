@@ -1,0 +1,10 @@
+{
+  "$id": "LegalRegistrationIdentifierType.json",
+  "type": "string",
+  "enum": [
+    "TL",
+    "EID",
+    "PAS",
+    "CD"
+  ]
+}

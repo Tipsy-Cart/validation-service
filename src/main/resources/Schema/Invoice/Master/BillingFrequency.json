@@ -1,0 +1,16 @@
+{
+  "$id": "BillingFrequency.json",
+  "type": "string",
+  "enum": [
+    "DLY",
+    "WKY",
+    "Q15",
+    "MTH",
+    "Q45",
+    "Q60",
+    "QTR",
+    "YRL",
+    "HYR",
+    "OTH"
+  ]
+}

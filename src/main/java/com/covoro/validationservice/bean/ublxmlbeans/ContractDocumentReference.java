@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * <h1>Contract reference</h1>
@@ -27,5 +27,9 @@ public class ContractDocumentReference {
     @JacksonXmlProperty(localName = "ID", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "ID", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     private String id;
+
+    @JacksonXmlProperty(localName = "DocumentDescription", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    @XmlElement(name = "DocumentDescription", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    private String documentDescription;
 
 }

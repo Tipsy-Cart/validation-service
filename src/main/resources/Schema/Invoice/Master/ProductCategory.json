@@ -1,0 +1,11 @@
+{
+  "$id": "ProductCategory.json",
+  "type": "string",
+  "enum": [
+    "DL8.48.8.2",
+    "DL8.48.8.1",
+    "DL8.48.3.1",
+    "DL8.48.3.2",
+    "DL8.48.3.3"
+  ]
+}

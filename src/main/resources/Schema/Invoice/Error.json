@@ -1,0 +1,1195 @@
+{
+  ".id|required": {
+    "field" : "InvoiceNumber",
+    "message" : "Invoice Number is Mandatory"
+  },
+  "/id|minLength": {
+    "field" : "InvoiceNumber",
+    "message" : "Invoice Number Can not be Empty"
+  },
+  "/id|maxLength": {
+    "field" : "InvoiceNumber",
+    "message" : "Invoice Number Can not be have more than 64 Characters"
+  },
+  ".note|required": {
+    "field" : "Note",
+    "message" : "Invoice Note is Mandatory"
+  },
+  "/note|minLength": {
+    "field" : "Note",
+    "message" : "Invoice Note Can not be Empty"
+  },
+  "/note|maxLength": {
+    "field" : "Note",
+    "message" : "Invoice Note Can not be have more than 300 Characters"
+  },
+  ".issueDate|required": {
+    "field" : "IssueDate",
+    "message" : "Issue date is Mandatory"
+  },
+  "/issueDate|format": {
+    "field" : "IssueDate",
+    "message" : "Issue date must be valid date in YYYY-MM-DD format"
+  },
+  ".invoiceTypeCode|required": {
+    "field" : "InvoiceTypeCode",
+    "message" : "Invoice Type Code is mandatory"
+  },
+  "/invoiceTypeCode|enum": {
+    "field" : "InvoiceTypeCode",
+    "message" : "Invalid Invoice Type Code"
+  },
+  ".profileExecutionID|required": {
+    "field" : "ProfileExecutionID",
+    "message" : "Profile Execution ID is Mandatory"
+  },
+  "/profileExecutionID|enum": {
+    "field" : "ProfileExecutionID",
+    "message" : "Invalid Profile Execution ID"
+  },
+  ".documentCurrencyCode|required": {
+  "field" : "DocumentCurrencyCode",
+  "message" : "Document Currency Code is Mandatory"
+ },
+  "/documentCurrencyCode|enum": {
+    "field" : "DocumentCurrencyCode",
+    "message" : "Invalid Document Currency Code"
+  },
+  "/taxExchangeRate|not": {
+    "field" : "TaxExchangeRate",
+    "message" : "TaxExchangeRate is not required when Document Currency Code is AED"
+  },
+  ".taxExchangeRate|required": {
+    "field" : "TaxExchangeRate",
+    "message" : "TaxExchangeRate is Mandatory when Document Currency Code is not AED"
+  },
+  "/taxExchangeRate.calculationRate|required": {
+    "field" : "TaxExchangeRate.CalculationRate",
+    "message" : "CalculationRate is Mandatory when Document Currency Code is not AED"
+  },
+  "/taxExchangeRate/calculationRate|minimum": {
+    "field" : "TaxExchangeRate.CalculationRate",
+    "message" : "CalculationRate value cannot be less than 0"
+  },
+  "/taxExchangeRate/calculationRate|maximum": {
+    "field" : "TaxExchangeRate.CalculationRate",
+    "message" : "CalculationRate value cannot be more than 1000000"
+  },
+  "/taxExchangeRate/calculationRate|multipleOf": {
+    "field" : "TaxExchangeRate.CalculationRate",
+    "message" : "CalculationRate value can have maximum 6 decimal places values"
+  },
+  "/billingReference/invoiceDocumentReference/id|minLength": {
+  "field" : "BillingReference.InvoiceDocumentReference.ID",
+  "message" : "Preceding invoice Number Can not be Empty"
+ },
+  "/billingReference/invoiceDocumentReference/id|maxLength": {
+    "field" : "BillingReference.InvoiceDocumentReference.ID",
+    "message" : "Preceding invoice Number Can not be have more than 64 Characters"
+  },
+  "/billingReference/invoiceDocumentReference/issueDate|format": {
+    "field" : "BillingReference.InvoiceDocumentReference.IssueDate",
+    "message" : "Preceding invoice issue date must be valid date in YYYY-MM-DD format"
+  },
+  "/invoicePeriod/startDate|format": {
+    "field" : "InvoicePeriod.StartDate",
+    "message" : "Invoicing period start date must be valid date in YYYY-MM-DD format"
+  },
+  "/invoicePeriod/endDate|format": {
+    "field" : "InvoicePeriod.EndDate",
+    "message" : "Invoicing period end date must be valid date in YYYY-MM-DD format"
+  },
+  "/invoicePeriod/descriptionCode|enum": {
+    "field" : "InvoicePeriod.DescriptionCode",
+    "message" : "Invalid Billing Frequency Code"
+  },
+  "/contractDocumentReference/id|minLength": {
+    "field" : "ContractDocumentReference.ID",
+    "message" : "Contract reference can not be empty"
+  },
+  "/contractDocumentReference/id|maxLength": {
+    "field" : "ContractDocumentReference.ID",
+    "message" : "Contract reference can not be longer than 300 characters"
+  },
+  "/contractDocumentReference/documentDescription|minLength": {
+    "field" : "ContractDocumentReference.DocumentDescription",
+    "message" : "Contract value can not be empty"
+  },
+  "/contractDocumentReference/documentDescription|maxLength": {
+    "field" : "ContractDocumentReference.DocumentDescription",
+    "message" : "Contract value can not be longer than 300 characters"
+  },
+  ".accountingSupplierParty|required": {
+    "field" : "AccountingSupplierParty",
+    "message" : "Seller Detail is Mandatory"
+  },
+  "/accountingSupplierParty.party|required": {
+    "field" : "AccountingSupplierParty.Party",
+    "message" : "Seller Detail is Mandatory"
+  },
+  "/accountingSupplierParty/party.partyLegalEntity|required": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity",
+    "message" : "Seller name is Mandatory"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity.registrationName|required": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.RegistrationName",
+    "message" : "Seller name is Mandatory"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity/registrationName|minLength": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.RegistrationName",
+    "message" : "Seller name can not be empty"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity/registrationName|maxLength": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.RegistrationName",
+    "message" : "Seller name can not be more than 300 characters long"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity.companyID|required": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.CompanyID",
+    "message" : "Seller legal registration identifier is Mandatory"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity/companyID.schemeAgencyID|required": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.CompanyID.schemeAgencyID",
+    "message" : "Seller legal registration identifier type is Mandatory"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity/companyID/schemeAgencyID|enum": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.CompanyID.schemeAgencyID",
+    "message" : "Invalid Seller legal registration identifier type"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity/companyID.schemeAgencyName|required": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.CompanyID.schemeAgencyName",
+    "message" : "%s is mandatory when Legal registration identifier type is %s"
+  },
+  "/accountingSupplierParty/party/partyLegalEntity/companyID/schemeAgencyName|enum": {
+    "field" : "AccountingSupplierParty.Party.PartyLegalEntity.CompanyID.schemeAgencyName",
+    "message" : "Invalid Passport Issuing Country"
+  },
+  "/accountingSupplierParty/party.partyTaxScheme|required": {
+    "field" : "AccountingSupplierParty.Party.PartyTaxScheme",
+    "message" : "Seller TIN/TRN is Mandatory"
+  },
+  "/accountingSupplierParty/party/partyTaxScheme.companyID|required": {
+    "field" : "AccountingSupplierParty.Party.PartyTaxScheme.CompanyID",
+    "message" : "Seller TIN/TRN is Mandatory"
+  },
+  "/accountingSupplierParty/party/partyTaxScheme/companyID|false": {
+    "field" : "AccountingSupplierParty.Party.PartyTaxScheme.CompanyID",
+    "message" : "Please provide either 10 digit TIN or 15 digit TRN"
+  },
+  "/accountingSupplierParty/party/partyTaxScheme/companyID|pattern|^1\\d{9}$": {
+    "field" : "AccountingSupplierParty.Party.PartyTaxScheme.CompanyID",
+    "message" : "Seller TIN must be 10 numeric digits and should be of the format 1XXXXXXXXXX"
+  },
+  "/accountingSupplierParty/party/partyTaxScheme/companyID|pattern|^1[A-Za-z0-9]{12}03$": {
+    "field" : "AccountingSupplierParty.Party.PartyTaxScheme.CompanyID",
+    "message" : "Seller TRN must be 15 alpha numeric digits and should be of the format 1XXXXXXXXXXXXX03"
+  },
+  "/accountingSupplierParty/party.postalAddress|required": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress",
+    "message" : "Seller Address is Mandatory"
+  },
+  "/accountingSupplierParty/party/postalAddress.streetName|required": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.StreetName",
+    "message" : "Seller Address Line One is Mandatory"
+  },
+  "/accountingSupplierParty/party/postalAddress/streetName|minLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.StreetName",
+    "message" : "Seller Address Line One can not be empty"
+  },
+  "/accountingSupplierParty/party/postalAddress/streetName|maxLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.StreetName",
+    "message" : "Seller Address Line One can not be more than 300 characters long"
+  },
+  "/accountingSupplierParty/party/postalAddress.cityName|required": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.CityName",
+    "message" : "Seller City name is Mandatory"
+  },
+  "/accountingSupplierParty/party/postalAddress/cityName|minLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.CityName",
+    "message" : "Seller City name can not be empty"
+  },
+  "/accountingSupplierParty/party/postalAddress/cityName|maxLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.CityName",
+    "message" : "Seller City name can not be more than 64 characters long"
+  },
+  "/accountingSupplierParty/party/postalAddress.countrySubentity|required": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.CountrySubentity",
+    "message" : "Seller Country Sub Division is Mandatory"
+  },
+  "/accountingSupplierParty/party/postalAddress/countrySubentity|minLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.CountrySubentity",
+    "message" : "Seller Country Sub Division can not be empty"
+  },
+  "/accountingSupplierParty/party/postalAddress/countrySubentity|maxLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.CountrySubentity",
+    "message" : "Seller Country Sub Division can not be more than 64 characters long"
+  },
+  "/accountingSupplierParty/party/postalAddress/countrySubentity|enum": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.CountrySubentity",
+    "message" : "When Seller Country code is AE, then country subdivision should be one among one of these (AUH, DXB, SHJ, UAQ, FUJ, AJM, RAK)"
+  },
+  "/accountingSupplierParty/party/postalAddress.country|required": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.Country",
+    "message" : "Seller Country is Mandatory"
+  },
+  "/accountingSupplierParty/party/postalAddress/country.identificationCode|required": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.Country.IdentificationCode",
+    "message" : "Seller Country is Mandatory"
+  },
+  "/accountingSupplierParty/party/postalAddress/country/identificationCode|enum": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.Country.IdentificationCode",
+    "message" : "Invalid Seller Country Code"
+  },
+  ".accountingCustomerParty|required": {
+    "field" : "AccountingCustomerParty",
+    "message" : "Buyer Detail is Mandatory"
+  },
+  "/accountingCustomerParty.party|required": {
+    "field" : "AccountingCustomerParty.Party",
+    "message" : "Buyer Detail is Mandatory"
+  },
+  "/accountingCustomerParty/party.partyLegalEntity|required": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity",
+    "message" : "Buyer name is Mandatory"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity.registrationName|required": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.RegistrationName",
+    "message" : "Buyer name is Mandatory"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity/registrationName|minLength": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.RegistrationName",
+    "message" : "Buyer name can not be empty"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity/registrationName|maxLength": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.RegistrationName",
+    "message" : "Buyer name can not be more than 300 characters long"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity.companyID|required": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID",
+    "message" : "Buyer legal registration identifier is Mandatory"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity/companyID.id|required": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID",
+    "message" : "Buyer legal registration identifier is Mandatory"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity/companyID/id|minLength": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID",
+    "message" : "Buyer legal registration identifier can not be empty"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity/companyID/id|maxLength": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID",
+    "message" : "Buyer legal registration identifier can not be more than 20 characters"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity/companyID.schemeAgencyID|required": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID.schemeAgencyID",
+    "message" : "Buyer legal registration identifier type is Mandatory"
+  },
+  "/accountingCustomerParty/party/partyLegalEntity/companyID/schemeAgencyID|enum": {
+    "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID.schemeAgencyID",
+    "message" : "Invalid Buyer legal registration identifier type"
+  },
+  "/accountingCustomerParty/party/partyIdentification/id/schemeId|enum": {
+    "field" : "AccountingCustomerParty.Party.PartyIdentification.ID.schemeId",
+    "message" : "Invalid Buyer Scheme identifier"
+  },
+  "/accountingCustomerParty/party/partyIdentification/id/id|minlength": {
+    "field" : "AccountingCustomerParty.Party.PartyIdentification.ID",
+    "message" : "Buyer identifier can not be empty"
+  },
+  "/accountingCustomerParty/party/partyIdentification/id/id|maxLength": {
+    "field" : "AccountingCustomerParty.Party.PartyIdentification.ID",
+    "message" : "Buyer identifier can not be more than 300 characters long"
+  },
+  "/accountingCustomerParty/party.endpointID|required": {
+    "field" : "AccountingCustomerParty.Party.EndpointID",
+    "message" : "Buyer  electronic address is Mandatory"
+  },
+  "/accountingCustomerParty/party/endpointID.id|required": {
+    "field" : "AccountingCustomerParty.Party.EndpointID",
+    "message" : "Buyer electronic address can not be empty"
+  },
+  "/accountingCustomerParty/party/endpointID/id|minLength": {
+    "field" : "AccountingCustomerParty.Party.EndpointID",
+    "message" : "Buyer electronic address can not be empty"
+  },
+  "/accountingCustomerParty/party/endpointID/id|maxLength": {
+    "field" : "AccountingCustomerParty.Party.EndpointID",
+    "message" : "Buyer electronic address can not be more than 300 characters"
+  },
+  "/accountingCustomerParty/party/endpointID.schemeID|required": {
+    "field" : "AccountingCustomerParty.Party.EndpointID.schemeId",
+    "message" : "Buyer electronic address scheme is Mandatory"
+  },
+  "/accountingCustomerParty/party/endpointID/schemeID|enum": {
+    "field" : "AccountingCustomerParty.Party.EndpointID.schemeId",
+    "message" : "Invalid Buyer electronic address scheme "
+  },
+  "/accountingCustomerParty/party.partyTaxScheme|required": {
+    "field" : "AccountingCustomerParty.Party.PartyTaxScheme",
+    "message" : "Buyer TIN is Mandatory"
+  },
+  "/accountingCustomerParty/party/partyTaxScheme.companyID|required": {
+    "field" : "AccountingCustomerParty.Party.PartyTaxScheme.CompanyID",
+    "message" : "Buyer TIN is Mandatory"
+  },
+  "/accountingCustomerParty/party/partyTaxScheme/companyID|pattern|^1[A-Za-z0-9]{12}03$": {
+    "field" : "AccountingCustomerParty.Party.PartyTaxScheme.CompanyID",
+    "message" : "Buyer TRN must be 15 alpha numeric digits and should be of the format 1XXXXXXXXXXXXX03"
+  },
+  "/accountingCustomerParty/party.postalAddress|required": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress",
+    "message" : "Buyer Address is Mandatory"
+  },
+  "/accountingCustomerParty/party/postalAddress.streetName|required": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.StreetName",
+    "message" : "Buyer Address Line One is Mandatory"
+  },
+  "/accountingCustomerParty/party/postalAddress/streetName|minLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.StreetName",
+    "message" : "Buyer Address Line One can not be empty"
+  },
+  "/accountingCustomerParty/party/postalAddress/streetName|maxLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.StreetName",
+    "message" : "Buyer Address Line One can not be more than 300 characters long"
+  },
+  "/accountingCustomerParty/party/postalAddress.cityName|required": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CityName",
+    "message" : "Buyer City name is Mandatory"
+  },
+  "/accountingCustomerParty/party/postalAddress/cityName|minLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CityName",
+    "message" : "Buyer City name can not be empty"
+  },
+  "/accountingCustomerParty/party/postalAddress/cityName|maxLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CityName",
+    "message" : "Buyer City name can not be more than 64 characters long"
+  },
+  "/accountingCustomerParty/party/postalAddress.countrySubentity|required": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CountrySubentity",
+    "message" : "Buyer Country Sub Division is Mandatory"
+  },
+  "/accountingCustomerParty/party/postalAddress/countrySubentity|minLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CountrySubentity",
+    "message" : "Buyer Country Sub Division can not be empty"
+  },
+  "/accountingCustomerParty/party/postalAddress/countrySubentity|maxLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CountrySubentity",
+    "message" : "Buyer Country Sub Division can not be more than 64 characters long"
+  },
+  "/accountingCustomerParty/party/postalAddress/countrySubentity|enum": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CountrySubentity",
+    "message" : "When Buyer Country code is AE, then country subdivision should be one among one of these (AUH, DXB, SHJ, UAQ, FUJ, AJM, RAK)"
+  },
+  "/accountingCustomerParty/party/postalAddress.country|required": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.Country",
+    "message" : "Buyer Country is Mandatory"
+  },
+  "/accountingCustomerParty/party/postalAddress/country.identificationCode|required": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode",
+    "message" : "Buyer Country is Mandatory"
+  },
+  "/accountingCustomerParty/party/postalAddress/country/identificationCode|enum": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode",
+    "message" : "Invalid Buyer Country Code"
+  },
+  "/delivery/deliveryParty/partyName/name|minLength": {
+    "field" : "Delivery.DeliveryParty.PartyName.Name",
+    "message" : "Delivery Party Name Can not be empty"
+  },
+  "/delivery/deliveryParty/partyName/name|maxLength": {
+    "field" : "Delivery.DeliveryParty.PartyName.Name",
+    "message" : "Delivery Party Name Can not be longer than 300 Characters"
+  },
+  "/delivery/deliveryLocation/id/id|minLength": {
+    "field" : "Delivery.DeliveryLocation.ID",
+    "message" : "Delivery Location ID Can not be empty"
+  },
+  "/delivery/deliveryLocation/id/id|maxLength": {
+    "field" : "Delivery.DeliveryLocation.ID",
+    "message" : "Delivery Location ID Can not be longer than 300 Characters"
+  },
+  "/delivery/deliveryLocation/id/schemeId|enum": {
+    "field" : "Delivery.DeliveryLocation.ID.schemeId",
+    "message" : "Invalid Delivery Location schemeId"
+  },
+  "/delivery/actualDeliveryDate|format": {
+    "field" : "Delivery.DeliveryLocation.ActualDeliveryDate",
+    "message" : "Actual Delivery date must be valid date in YYYY-MM-DD format"
+  },
+  "/delivery/deliveryLocation/address/streetName|minLength": {
+    "field" : "Delivery.DeliveryLocation.Address.StreetName",
+    "message" : "Delivery Address Line One Can not be Empty"
+  },
+  "/delivery/deliveryLocation/address/streetName|maxLength": {
+    "field" : "Delivery.DeliveryLocation.Address.StreetName",
+    "message" : "Delivery Address Line One Can not be more than 300 characters long"
+  },
+  "/delivery/deliveryLocation/address/additionalStreetName|minLength": {
+    "field" : "Delivery.DeliveryLocation.Address.AdditionalStreetName",
+    "message" : "Delivery Address Line Two Can not be Empty"
+  },
+  "/delivery/deliveryLocation/address/additionalStreetName|maxLength": {
+    "field" : "Delivery.DeliveryLocation.Address.AdditionalStreetName",
+    "message" : "Delivery Address Line Two Can not be more than 300 characters long"
+  },
+  "/delivery/deliveryLocation/address/addressLine/%d/line|minLength": {
+    "field" : "Delivery.DeliveryLocation.Address.AddressLine[%d].Line",
+    "message" : "Delivery Address Line Can not be Empty"
+  },
+  "/delivery/deliveryLocation/address/addressLine/%d/line|maxLength": {
+    "field" : "Delivery.DeliveryLocation.Address.AddressLine[%d].Line",
+    "message" : "Delivery Address Line Can not be more than 300 characters long"
+  },
+  "/delivery/deliveryLocation/address/cityName|minLength": {
+    "field" : "Delivery.DeliveryLocation.Address.CityName",
+    "message" : "Delivery City name Can not be Empty"
+  },
+  "/delivery/deliveryLocation/address/cityName|maxLength": {
+    "field" : "Delivery.DeliveryLocation.Address.CityName",
+    "message" : "Delivery City name Can not be more than 64 characters long"
+  },
+  "/delivery/deliveryLocation/address/postalZone|minLength": {
+    "field" : "Delivery.DeliveryLocation.Address.PostalZone",
+    "message" : "Delivery Post Code Can not be Empty"
+  },
+  "/delivery/deliveryLocation/address/postalZone|maxLength": {
+    "field" : "Delivery.DeliveryLocation.Address.PostalZone",
+    "message" : "Delivery Post Code Can not be more than 10 characters long"
+  },
+  "/delivery/deliveryLocation/address/countrySubentity|minLength": {
+    "field" : "Delivery.DeliveryLocation.Address.CountrySubentity",
+    "message" : "Delivery Country Sub Division Can not be Empty"
+  },
+  "/delivery/deliveryLocation/address/countrySubentity|maxLength": {
+    "field" : "Delivery.DeliveryLocation.Address.CountrySubentity",
+    "message" : "Delivery Country Sub Division Can not be more than 64 Characters long"
+  },
+  "/delivery/deliveryLocation/address/countrySubentity|enum": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.CountrySubentity",
+    "message" : "When Delivery Country code is AE, then country subdivision should be one among one of these (AUH, DXB, SHJ, UAQ, FUJ, AJM, RAK)"
+  },
+  "/delivery/deliveryLocation/address/country/identificationCode|enum": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.Country.IdentificationCode",
+    "message" : "Invalid Delivery Country Code"
+  },
+  ".sellerSupplierParty|required": {
+    "field" : "SellerSupplierParty",
+    "message" : "Principal ID is mandatory for Disclosed Agent Billing"
+  },
+  "/sellerSupplierParty.party|required": {
+    "field" : "SellerSupplierParty.Party",
+    "message" : "Principal ID is mandatory for Disclosed Agent Billing"
+  },
+  "/sellerSupplierParty/party.partyIdentification|required": {
+    "field" : "SellerSupplierParty.Party.PartyIdentification",
+    "message" : "Principal ID is mandatory for Disclosed Agent Billing"
+  },
+  "/sellerSupplierParty/party/partyIdentification.id|required": {
+    "field" : "SellerSupplierParty.Party.PartyIdentification.ID",
+    "message" : "Principal ID is mandatory for Disclosed Agent Billing"
+  },
+  "/sellerSupplierParty/party/partyIdentification/id/id|pattern|^1[A-Za-z0-9]{12}03$": {
+    "field" : "SellerSupplierParty.Party.PartyIdentification.ID",
+    "message" : "Principal ID must be 15 alpha numeric digits and should be of the format 1XXXXXXXXXXXXX03"
+  },
+  "/legalMonetaryTotal.lineExtensionAmount|required": {
+    "field" : "LegalMonetaryTotal.LineExtensionAmount",
+    "message" : "Invoice line net amount total is mandatory"
+  },
+  "/legalMonetaryTotal/lineExtensionAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.LineExtensionAmount.currencyID",
+    "message" : "Invoice line net amount currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/lineExtensionAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.LineExtensionAmount.currencyID",
+    "message" : "Invalid Invoice line net amount currency ID"
+  },
+  "/legalMonetaryTotal/lineExtensionAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.LineExtensionAmount.amount",
+    "message" : "Invoice line net amount total is mandatory"
+  },
+  "/legalMonetaryTotal/lineExtensionAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.LineExtensionAmount.amount",
+    "message" : "Invoice line net amount cannot be less than 1"
+  },
+  "/legalMonetaryTotal/lineExtensionAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.LineExtensionAmount.amount",
+    "message" : "Invoice line net amount be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/lineExtensionAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.LineExtensionAmount.amount",
+    "message" : "Invoice line net amount can have maximum 2 decimal places values"
+  },
+  "/legalMonetaryTotal/allowanceTotalAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.AllowanceTotalAmount.currencyID",
+    "message" : "Allowance total amount currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/allowanceTotalAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.AllowanceTotalAmount.currencyID",
+    "message" : "Invalid Allowance total amount currency ID"
+  },
+  "/legalMonetaryTotal/allowanceTotalAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.AllowanceTotalAmount.amount",
+    "message" : "Allowance total amount is mandatory"
+  },
+  "/legalMonetaryTotal/allowanceTotalAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.AllowanceTotalAmount.amount",
+    "message" : "Allowance total amount cannot be less than 1"
+  },
+  "/legalMonetaryTotal/allowanceTotalAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.AllowanceTotalAmount.amount",
+    "message" : "Allowance total amount be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/allowanceTotalAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.AllowanceTotalAmount.amount",
+    "message" : "Allowance total amount can have maximum 2 decimal places values"
+  },
+  "/legalMonetaryTotal/chargeTotalAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.ChargeTotalAmount.currencyID",
+    "message" : "Charge total amount currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/chargeTotalAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.ChargeTotalAmount.currencyID",
+    "message" : "Invalid Charge total amount currency ID"
+  },
+  "/legalMonetaryTotal/chargeTotalAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.ChargeTotalAmount.amount",
+    "message" : "Charge total amount is mandatory"
+  },
+  "/legalMonetaryTotal/chargeTotalAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.ChargeTotalAmount.amount",
+    "message" : "Charge total amount cannot be less than 1"
+  },
+  "/legalMonetaryTotal/chargeTotalAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.ChargeTotalAmount.amount",
+    "message" : "Charge total amount be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/chargeTotalAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.ChargeTotalAmount.amount",
+    "message" : "Charge total amount can have maximum 2 decimal places values"
+  },
+  "/legalMonetaryTotal.taxExclusiveAmount|required": {
+    "field" : "LegalMonetaryTotal.TaxExclusiveAmount",
+    "message" : "Invoice total amount without tax is mandatory"
+  },
+  "/legalMonetaryTotal/taxExclusiveAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.TaxExclusiveAmount.currencyID",
+    "message" : "Invoice total without tax currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/taxExclusiveAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.TaxExclusiveAmount.currencyID",
+    "message" : "Invalid Invoice total amount without tax currency ID"
+  },
+  "/legalMonetaryTotal/taxExclusiveAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.TaxExclusiveAmount.amount",
+    "message" : "Invoice total amount without tax is mandatory"
+  },
+  "/legalMonetaryTotal/taxExclusiveAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.TaxExclusiveAmount.amount",
+    "message" : "Invoice total amount without tax cannot be less than 1"
+  },
+  "/legalMonetaryTotal/taxExclusiveAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.TaxExclusiveAmount.amount",
+    "message" : "Invoice total amount without tax be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/taxExclusiveAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.TaxExclusiveAmount.amount",
+    "message" : "Invoice total amount without tax can have maximum 2 decimal places values"
+  },
+  "/legalMonetaryTotal.taxInclusiveAmount|required": {
+    "field" : "LegalMonetaryTotal.TaxInclusiveAmount",
+    "message" : "Invoice total amount with tax is mandatory"
+  },
+  "/legalMonetaryTotal/taxInclusiveAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.TaxInclusiveAmount.currencyID",
+    "message" : "Invoice total with tax currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/taxInclusiveAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.TaxInclusiveAmount.currencyID",
+    "message" : "Invalid Invoice total amount with tax currency ID"
+  },
+  "/legalMonetaryTotal/taxInclusiveAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.TaxInclusiveAmount.amount",
+    "message" : "Invoice total amount with tax is mandatory"
+  },
+  "/legalMonetaryTotal/taxInclusiveAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.TaxInclusiveAmount.amount",
+    "message" : "Invoice total amount with tax cannot be less than 1"
+  },
+  "/legalMonetaryTotal/taxInclusiveAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.TaxInclusiveAmount.amount",
+    "message" : "Invoice total amount with tax be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/taxInclusiveAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.TaxInclusiveAmount.amount",
+    "message" : "Invoice total amount with tax can have maximum 2 decimal places values"
+  },
+  "/legalMonetaryTotal/prepaidAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.PrepaidAmount.currencyID",
+    "message" : "Prepaid amount currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/prepaidAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.PrepaidAmount.currencyID",
+    "message" : "Invalid Prepaid total amount currency ID"
+  },
+  "/legalMonetaryTotal/prepaidAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.PrepaidAmount.amount",
+    "message" : "Prepaid amount is mandatory"
+  },
+  "/legalMonetaryTotal/prepaidAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.PrepaidAmount.amount",
+    "message" : "Prepaid amount cannot be less than 1"
+  },
+  "/legalMonetaryTotal/prepaidAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.PrepaidAmount.amount",
+    "message" : "Prepaid amount be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/prepaidAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.PrepaidAmount.amount",
+    "message" : "Prepaid amount can have maximum 2 decimal places values"
+  },
+  "/legalMonetaryTotal/payableRoundingAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.PayableRoundingAmount.currencyID",
+    "message" : "Payable Rounding amount currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/payableRoundingAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.PayableRoundingAmount.currencyID",
+    "message" : "Invalid Payable Rounding amount currency ID"
+  },
+  "/legalMonetaryTotal/payableRoundingAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.PayableRoundingAmount.amount",
+    "message" : "Payable Rounding amount is mandatory"
+  },
+  "/legalMonetaryTotal/payableRoundingAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.PayableRoundingAmount.amount",
+    "message" : "Payable Rounding amount cannot be less than 1"
+  },
+  "/legalMonetaryTotal/payableRoundingAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.PayableRoundingAmount.amount",
+    "message" : "Payable Rounding amount be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/payableRoundingAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.PayableRoundingAmount.amount",
+    "message" : "Payable Rounding amount can have maximum 2 decimal places values"
+  },
+  "/legalMonetaryTotal.payableAmount|required": {
+    "field" : "LegalMonetaryTotal.PayableAmount",
+    "message" : "Invoice total Payable amount  is mandatory"
+  },
+  "/legalMonetaryTotal/payableAmount.currencyID|required": {
+    "field" : "LegalMonetaryTotal.PayableAmount.currencyID",
+    "message" : "Invoice total Payable amount currency ID is mandatory"
+  },
+  "/legalMonetaryTotal/payableAmount/currencyID|enum": {
+    "field" : "LegalMonetaryTotal.PayableAmount.currencyID",
+    "message" : "Invalid Invoice total Payable amount currency ID"
+  },
+  "/legalMonetaryTotal/payableAmount.amount|required": {
+    "field" : "LegalMonetaryTotal.PayableAmount.amount",
+    "message" : "Invoice total Payable amount  is mandatory"
+  },
+  "/legalMonetaryTotal/payableAmount/amount|minimum": {
+    "field" : "LegalMonetaryTotal.PayableAmount.amount",
+    "message" : "Invoice total Payable amount can not be less than 1"
+  },
+  "/legalMonetaryTotal/payableAmount/amount|maximum": {
+    "field" : "LegalMonetaryTotal.PayableAmount.amount",
+    "message" : "Invoice total Payable amount can not be more than 1,000,000,000,000"
+  },
+  "/legalMonetaryTotal/payableAmount/amount|multipleOf": {
+    "field" : "LegalMonetaryTotal.PayableAmount.amount",
+    "message" : "Invoice total Payable amount can have maximum 2 decimal places values"
+  },
+  ".taxTotal|required": {
+    "field" : "TaxTotal",
+    "message" : "Tax Total is mandatory"
+  },
+  "/taxTotal.taxAmount|required": {
+    "field" : "TaxTotal.TaxAmount",
+    "message" : "Total tax amount is mandatory"
+  },
+  "/taxTotal/taxAmount.currencyID|required": {
+    "field" : "TaxTotal.TaxAmount.currencyID",
+    "message" : "Total tax amount currency ID is mandatory"
+  },
+  "/taxTotal/taxAmount/currencyID|enum": {
+    "field" : "TaxTotal.TaxAmount.currencyID",
+    "message" : "Invalid Total tax amount currency ID"
+  },
+  "/taxTotal/taxAmount.amount|required": {
+    "field" : "TaxTotal.TaxAmount.amount",
+    "message" : "Total tax amount is mandatory"
+  },
+  "/taxTotal/taxAmount/amount|minimum": {
+    "field" : "TaxTotal.TaxAmount.amount",
+    "message" : "Total tax amount can not be less than 1"
+  },
+  "/taxTotal/taxAmount/amount|maximum": {
+    "field" : "TaxTotal.TaxAmount.amount",
+    "message" : "Total tax amount can not be more than 1,000,000,000,000"
+  },
+  "/taxTotal/taxAmount/amount|multipleOf": {
+    "field" : "TaxTotal.TaxAmount.amount",
+    "message" : "Total tax amount can have maximum 2 decimal places values"
+  },
+  "/taxTotal.taxSubtotalList|required": {
+    "field" : "TaxTotal.TaxSubtotal",
+    "message" : "Tax Sub Total is mandatory"
+  },
+  "/taxTotal/taxSubtotalList|minItems": {
+    "field" : "TaxTotal.TaxSubtotal",
+    "message" : "At least one Tax Sub Total is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d.taxableAmount|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount",
+    "message" : "Taxable amount is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxableAmount.currencyID|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.currencyID",
+    "message" : "Taxable amount currency ID is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxableAmount/currencyID|enum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.currencyID",
+    "message" : "Invalid Taxable amount currency ID"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxableAmount.amount|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
+    "message" : "Taxable amount is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxableAmount/amount|minimum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
+    "message" : "Taxable amount can not be less than 0"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxableAmount/amount|maximum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
+    "message" : "Taxable amount can not be more than 1,000,000,000,000"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxableAmount/amount|multipleOf": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
+    "message" : "Taxable amount can have maximum 2 decimal places values"
+  },
+  "/taxTotal/taxSubtotalList/%d.taxAmount|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount",
+    "message" : "Tax amount is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxAmount.currencyID|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.currencyID",
+    "message" : "Tax amount currency ID is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxAmount/currencyID|enum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.currencyID",
+    "message" : "Invalid Tax amount currency ID"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxAmount.amount|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
+    "message" : "Tax amount is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxAmount/amount|minimum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
+    "message" : "Tax amount can not be less than 0"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxAmount/amount|maximum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
+    "message" : "Tax amount can not be more than 1,000,000,000,000"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxAmount/amount|multipleOf": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
+    "message" : "Tax amount can have maximum 2 decimal places values"
+  },
+  "/taxTotal/taxSubtotalList/%d.taxCategory|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory",
+    "message" : "Tax category is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxCategory.id|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.ID",
+    "message" : "Tax category code is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxCategory/id|enum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.ID",
+    "message" : "Invalid tax category code"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxCategory.percent|required": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
+    "message" : "Tax rate is mandatory"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxCategory/percent|minimum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
+    "message" : "Tax rate can not be less than 0"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxCategory/percent|maximum": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
+    "message" : "Tax rate can not be more than 100"
+  },
+  "/taxTotal/taxSubtotalList/%d/taxCategory/percent|multipleOf": {
+    "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
+    "message" : "Tax rate can have maximum 2 decimal places values"
+  },
+  ".invoiceLine|required": {
+    "field" : "InvoiceLine",
+    "message" : "Line item is mandatory"
+  },
+  "/invoiceLine|minItems": {
+    "field" : "InvoiceLine",
+    "message" : "At least one Line item is mandatory"
+  },
+  "/invoiceLine/%d.id|required": {
+    "field" : "InvoiceLine[%d].ID",
+    "message" : "Invoice Line Identifier is mandatory"
+  },
+  "/invoiceLine/%d/id|minLength": {
+    "field" : "InvoiceLine[%d].ID",
+    "message" : "Invoice Line Identifier can not be empty"
+  },
+  "/invoiceLine/%d/id|maxLength": {
+    "field" : "InvoiceLine[%d].ID",
+    "message" : "Invoice Line Identifier can not have more tha 15 characters"
+  },
+  "/invoiceLine/%d.lineExtensionAmount|required": {
+    "field" : "InvoiceLine[%d].LineExtensionAmount",
+    "message" : "Invoice Line Net Amount is mandatory"
+  },
+  "/invoiceLine/%d/lineExtensionAmount.currencyID|required": {
+    "field" : "InvoiceLine[%d].LineExtensionAmount.currencyID",
+    "message" : "Invoice Line Net Amount currency ID is mandatory"
+  },
+  "/invoiceLine/%d/lineExtensionAmount/currencyID|enum": {
+    "field" : "InvoiceLine[%d].LineExtensionAmount.currencyID",
+    "message" : "Invalid Invoice Line Net Amount currency ID"
+  },
+  "/invoiceLine/%d/lineExtensionAmount.amount|required": {
+    "field" : "InvoiceLine[%d].LineExtensionAmount",
+    "message" : "Invoice Line Net Amount is mandatory"
+  },
+  "/invoiceLine/%d/lineExtensionAmount/amount|minimum": {
+    "field" : "InvoiceLine[%d].LineExtensionAmount",
+    "message" : "Invoice Line Net Amount can not be less than 0"
+  },
+  "/invoiceLine/%d/lineExtensionAmount/amount|maximum": {
+    "field" : "InvoiceLine[%d].LineExtensionAmount",
+    "message" : "Invoice Line Net Amount can not be more than 1,000,000,000,000"
+  },
+  "/invoiceLine/%d/lineExtensionAmount/amount|multipleOf": {
+    "field" : "InvoiceLine[%d].LineExtensionAmount",
+    "message" : "Invoice Line Net Amount can have maximum 2 decimal places values"
+  },
+  "/invoiceLine/%d.item|required": {
+    "field" : "InvoiceLine[%d].Item",
+    "message" : "Invoice Line Item is mandatory"
+  },
+  "/invoiceLine/%d/item.name|required": {
+    "field" : "InvoiceLine[%d].Item.Name",
+    "message" : "Invoice Line Item name is mandatory"
+  },
+  "/invoiceLine/%d/item/name|minLength": {
+    "field" : "InvoiceLine[%d].Item.Name",
+    "message" : "Invoice Line Item name can not be empty"
+  },
+  "/invoiceLine/%d/item/name|maxLength": {
+    "field" : "InvoiceLine[%d].Item.Name",
+    "message" : "Invoice Line Item name can not have more than 300 characters"
+  },
+  "/invoiceLine/%d/item.description|required": {
+    "field" : "InvoiceLine[%d].Item.Description",
+    "message" : "Invoice Line Item description is mandatory"
+  },
+  "/invoiceLine/%d/item/description|minLength": {
+    "field" : "InvoiceLine[%d].Item.Description",
+    "message" : "Invoice Line Item description can not be empty"
+  },
+  "/invoiceLine/%d/item/description|maxLength": {
+    "field" : "InvoiceLine[%d].Item.Description",
+    "message" : "Invoice Line Item description can not have more than 300 characters"
+  },
+  "/invoiceLine/%d/item.commodityClassification|required": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification",
+    "message" : "Item type is mandatory"
+  },
+  "/invoiceLine/%d/item/commodityClassification.commodityCode|required": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.CommodityCode",
+    "message" : "Item type is mandatory"
+  },
+  "/invoiceLine/%d/item/commodityClassification/commodityCode|enum": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.CommodityCode",
+    "message" : "Invalid Item type"
+  },
+  "/invoiceLine/%d/item/commodityClassification/natureCode|enum": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.NatureCode",
+    "message" : "Invalid Type of goods or services subject to RCM"
+  },
+  "/invoiceLine/%d/item/standardItemIdentification/id|minLength": {
+    "field" : "InvoiceLine[%d].Item.StandardItemIdentification.ID",
+    "message" : "Item standard identifier can not be empty"
+  },
+  "/invoiceLine/%d/item/standardItemIdentification/id|maxLength": {
+    "field" : "InvoiceLine[%d].Item.StandardItemIdentification.ID",
+    "message" : "Item standard identifier can not be longer than 15 characters"
+  },
+  "/invoiceLine/%d/item/commodityClassification/itemClassificationCode/code|enum": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.NatureCode",
+    "message" : "Invalid Item classification identifier"
+  },
+  "/invoiceLine/%d.price|required": {
+    "field" : "InvoiceLine[%d].Price",
+    "message" : "Price is mandatory"
+  },
+  "/invoiceLine/%d/price.baseQuantity|required": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity",
+    "message" : "Item base quantity is mandatory"
+  },
+  "/invoiceLine/%d/price/baseQuantity.unitCode|required": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.UnitCode",
+    "message" : "Unit of measurement is mandatory"
+  },
+  "/invoiceLine/%d/price/baseQuantity/unitCode|enum": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.UnitCode",
+    "message" : "Invalid Unit of measurement"
+  },
+  "/invoiceLine/%d/price/baseQuantity.quantity|required": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.Quantity",
+    "message" : "Item base quantity is mandatory"
+  },
+  "/invoiceLine/%d/price/baseQuantity/quantity|minimum": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.Quantity",
+    "message" : "Item base quantity can not be less than 1"
+  },
+  "/invoiceLine/%d/price/baseQuantity/quantity|maximum": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.Quantity",
+    "message" : "Item base quantity can not be more than 1,000,000,000"
+  },
+  "/invoiceLine/%d/price.allowanceCharge|required": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge",
+    "message" : "Item Price  allowance charge is mandatory"
+  },
+  "/invoiceLine/%d/price/allowanceCharge.baseAmount|required": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.BaseAmount",
+    "message" : "Item Price Base Amount is mandatory"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/baseAmount.currencyID|required": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.BaseAmount.currencyID",
+    "message" : "Item Price Base Amount currency ID is mandatory"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/baseAmount/currencyID|enum": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.BaseAmount.currencyID",
+    "message" : "Invalid Item Price Base Amount currency ID"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/baseAmount.amount|required": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.BaseAmount",
+    "message" : "Item Price Base Amount is mandatory"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/baseAmount/amount|minimum": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.BaseAmount",
+    "message" : "Item Price Base Amount can not be less than 0"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/baseAmount/amount|maximum": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.BaseAmount",
+    "message" : "Item Price Base Amount can not be more than 1,000,000,000,000"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/baseAmount/amount|multipleOf": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.BaseAmount",
+    "message" : "Item Price Base Amount can have maximum 2 decimal places values"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/amount.currencyID|required": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.Amount.currencyID",
+    "message" : "Item Price Allowance Charge Amount currency ID is mandatory"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/amount/currencyID|enum": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.Amount.currencyID",
+    "message" : "Invalid Item Price Allowance Charge Amount currency ID"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/amount.amount|required": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.Amount",
+    "message" : "Item Price Allowance Charge Amount is mandatory"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/amount/amount|minimum": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.Amount",
+    "message" : "Item Price Allowance Charge Amount can not be less than 0"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/amount/amount|maximum": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.Amount",
+    "message" : "Item Price Allowance Charge Amount can not be more than 1,000,000,000,000"
+  },
+  "/invoiceLine/%d/price/allowanceCharge/amount/amount|multipleOf": {
+    "field" : "InvoiceLine[%d].Price.AllowanceCharge.Amount",
+    "message" : "Item Price Allowance Charge Amount can have maximum 2 decimal places values"
+  },
+  "/invoiceLine/%d/price.priceAmount|required": {
+    "field" : "InvoiceLine[%d].Price.PriceAmount",
+    "message" : "Item Net Price is mandatory"
+  },
+  "/invoiceLine/%d/price/priceAmount.currencyID|required": {
+    "field" : "InvoiceLine[%d].Price.PriceAmount.currencyID",
+    "message" : "Item Net Price currency ID is mandatory"
+  },
+  "/invoiceLine/%d/price/priceAmount/currencyID|enum": {
+    "field" : "InvoiceLine[%d].Price.PriceAmount.currencyID",
+    "message" : "Invalid Item Net Price currency ID"
+  },
+  "/invoiceLine/%d/price/priceAmount.amount|required": {
+    "field" : "InvoiceLine[%d].Price.PriceAmount",
+    "message" : "Item Net Price Base Amount is mandatory"
+  },
+  "/invoiceLine/%d/price/priceAmount/amount|minimum": {
+    "field" : "InvoiceLine[%d].Price.PriceAmount",
+    "message" : "Item Net Price Base Amount can not be less than 0"
+  },
+  "/invoiceLine/%d/price/priceAmount/amount|maximum": {
+    "field" : "InvoiceLine[%d].Price.PriceAmount",
+    "message" : "Item Net Price Base Amount can not be more than 1,000,000,000,000"
+  },
+  "/invoiceLine/%d/price/priceAmount/amount|multipleOf": {
+    "field" : "InvoiceLine[%d].Price.PriceAmount",
+    "message" : "Item Net Price Base Amount can have maximum 2 decimal places values"
+  },
+  "/invoiceLine/%d.invoicedQuantity|required": {
+    "field" : "InvoiceLine[%d].InvoicedQuantity",
+    "message" : "Item Invoiced quantity is mandatory"
+  },
+  "/invoiceLine/%d/invoicedQuantity.unitCode|required": {
+    "field" : "InvoiceLine[%d].InvoicedQuantity.UnitCode",
+    "message" : "Invoiced quantity Unit of measurement is mandatory"
+  },
+  "/invoiceLine/%d/invoicedQuantity/unitCode|enum": {
+    "field" : "InvoiceLine[%d].InvoicedQuantity.UnitCode",
+    "message" : "Invalid Invoiced quantity Unit of measurement"
+  },
+  "/invoiceLine/%d/invoicedQuantity.quantity|required": {
+    "field" : "InvoiceLine[%d].InvoicedQuantity.Quantity",
+    "message" : "Invoiced quantity is mandatory"
+  },
+  "/invoiceLine/%d/invoicedQuantity/quantity|minimum": {
+    "field" : "InvoiceLine[%d].InvoicedQuantity.Quantity",
+    "message" : "Invoiced quantity can not be less than 1"
+  },
+  "/invoiceLine/%d/invoicedQuantity/quantity|maximum": {
+    "field" : "InvoiceLine[%d].InvoicedQuantity.Quantity",
+    "message" : "Invoiced quantity can not be more than 1,000,000,000"
+  },
+  "/invoiceLine/%d/allowanceCharge/%d.chargeIndicator|required": {
+    "field" : "InvoiceLine[%d].AllowanceCharge[%d].ChargeIndicator",
+    "message" : "Charge indicator is mandatory"
+  },
+  "/invoiceLine/%d/allowanceCharge/%d.amount|required": {
+    "field" : "InvoiceLine[%d].AllowanceCharge[%d].Amount",
+    "message" : "Amount is mandatory"
+  },
+  "/invoiceLine/%d/allowanceCharge/%d/amount.currencyID|required": {
+    "field" : "InvoiceLine[%d].AllowanceCharge[%d].Amount.currencyID",
+    "message" : "Amount currencyID is mandatory"
+  },
+  "/invoiceLine/%d/allowanceCharge/%d/amount/currencyID|enum": {
+    "field" : "InvoiceLine[%d].AllowanceCharge[%d].Amount.currencyID",
+    "message" : "Invalid Amount currencyID"
+  },
+  "/invoiceLine/%d/allowanceCharge/%d/amount.amount|required": {
+    "field" : "InvoiceLine[%d].AllowanceCharge[%d].Amount",
+    "message" : "Amount is mandatory"
+  },
+  "/invoiceLine/%d/allowanceCharge/%d/amount/amount|minimum": {
+    "field" : "InvoiceLine[%d].AllowanceCharge[%d].Amount",
+    "message" : "Amount can not be less than 0"
+  },
+  "/invoiceLine/%d/allowanceCharge/%d/amount/amount|maximum": {
+    "field" : "InvoiceLine[%d].AllowanceCharge[%d].Amount",
+    "message" : "Amount can not be more than 1,000,000,000,000"
+  },
+  "/invoiceLine/%d.itemPriceExtension|required": {
+    "field" : "InvoiceLine[%d].ItemPriceExtension",
+    "message" : "Item Price Extension is mandatory"
+  },
+  "/invoiceLine/%d/itemPriceExtension.taxTotal|required": {
+    "field" : "InvoiceLine[%d].ItemPriceExtension.TaxTotal",
+    "message" : "Tax Total is mandatory"
+  },
+  "/invoiceLine/%d/itemPriceExtension/taxTotal.taxAmount|required": {
+    "field" : "InvoiceLine[%d].ItemPriceExtension.TaxTotal.TaxAmount",
+    "message" : "Tax Amount is mandatory"
+  },
+  "/invoiceLine/%d/itemPriceExtension/taxTotal/taxAmount.currencyID|required": {
+    "field" : "InvoiceLine[%d].ItemPriceExtension.TaxTotal.TaxAmount.currencyID",
+    "message" : "Tax Amount currencyID is mandatory"
+  },
+  "/invoiceLine/%d/itemPriceExtension/taxTotal/taxAmount/currencyID|enum": {
+    "field" : "InvoiceLine[%d].ItemPriceExtension.TaxTotal.TaxAmount.currencyID",
+    "message" : "Invalid Tax Amount currencyID"
+  },
+  "/invoiceLine/%d/itemPriceExtension/taxTotal/taxAmount.amount|required": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.Quantity",
+    "message" : "Tax Amount is mandatory"
+  },
+  "/invoiceLine/%d/itemPriceExtension/taxTotal/taxAmount/amount|minimum": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.Quantity",
+    "message" : "Tax Amount can not be less than 0"
+  },
+  "/invoiceLine/%d/itemPriceExtension/taxTotal/taxAmount/amount|maximum": {
+    "field" : "InvoiceLine[%d].Price.BaseQuantity.Quantity",
+    "message" : "Tax Amount can not be more than 1,000,000,000,000"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory|required": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory",
+    "message" : "Tax detail is mandatory"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory|minItems": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory",
+    "message" : "Please provide at least on Tax detail"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d.id|required": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].ID",
+    "message" : "Tax category ID is mandatory"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/id|enum": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].ID",
+    "message" : "Invalid Tax category ID"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/percent|minimum": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].Percent",
+    "message" : "Tax Percent can not be less than 0"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/percent|maximum": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].Percent",
+    "message" : "Tax Percent can not be more than 100"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/percent|multipleOf": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].Percent",
+    "message" : "Tax Percent can have maximum of two decimal places"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d.taxExemptionReasonCode|required": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].TaxExemptionReasonCode",
+    "message" : "Tax Exemption Reason Code is mandatory for When Tax Category Exempted"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/taxExemptionReasonCode|enum": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].TaxExemptionReasonCode",
+    "message" : "Invalid Tax Exemption Reason Code"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d.taxExemptionReason|required": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].TaxExemptionReason",
+    "message" : "Tax Exemption Reason is mandatory for When Tax Category Exempted"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/taxExemptionReason|minLength": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].TaxExemptionReason",
+    "message" : "Tax Exemption Reason Can not be empty"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/taxExemptionReason|maxLength": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].TaxExemptionReason",
+    "message" : "Tax Exemption Reason Can not have more than 300 characters"
+  },
+  "/invoiceLine/%d/item/originCountry/identificationCode|enum": {
+    "field" : "InvoiceLine[%d].Item.OriginCountry.IdentificationCode",
+    "message" : "Invalid origin country code"
+  },
+  "/invoiceLine/%d/item/additionalItemProperty/%d/name|minLength": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Name",
+    "message" : "Item Attribute name can not be empty"
+  },
+  "/invoiceLine/%d/item/additionalItemProperty/%d/name|maxLength": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Name",
+    "message" : "Item Attribute name can not have more than 300 characters"
+  },
+  "/invoiceLine/%d/item/additionalItemProperty/%d/value|minLength": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Value",
+    "message" : "Item Attribute value can not be empty"
+  },
+  "/invoiceLine/%d/item/additionalItemProperty/%d/value|maxLength": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Value",
+    "message" : "Item Attribute value can not have more than 300 characters"
+  }
+
+}

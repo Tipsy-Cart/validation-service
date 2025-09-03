@@ -1,0 +1,1354 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Invoice",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "issueDate": {
+      "type": "string",
+      "format": "YYYY-MM-DD"
+    },
+    "invoiceTypeCode": {
+      "$ref": "classpath:/Schema/Invoice/Master/InvoiceTypeCode.json"
+    },
+    "note": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 300
+    },
+    "profileExecutionID": {
+      "$ref": "classpath:/Schema/Invoice/Master/InvoiceTransactionTypeCode.json"
+    },
+    "documentCurrencyCode": {
+      "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+    },
+    "taxCurrencyCode": {
+      "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+    },
+    "taxExchangeRate": {
+      "type": "object",
+      "properties": {
+        "calculationRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000,
+          "multipleOf": 0.000001
+        }
+      }
+    },
+    "invoicePeriod": {
+      "type": "object",
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "format": "YYYY-MM-DD"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "YYYY-MM-DD"
+        },
+        "descriptionCode": {
+          "$ref": "classpath:/Schema/Invoice/Master/BillingFrequency.json"
+        }
+      }
+    },
+    "discrepancyResponse": {
+      "type": "object",
+      "properties": {
+        "responseCode": {
+          "$ref": "classpath:/Schema/Invoice/Master/CreditNoteReason.json"
+        }
+      }
+    },
+    "billingReference": {
+      "type": "object",
+      "properties": {
+        "invoiceDocumentReference": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "issueDate": {
+              "type": "string",
+              "format": "YYYY-MM-DD"
+            }
+          }
+        }
+      }
+    },
+    "contractDocumentReference": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "documentDescription": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        }
+      }
+    },
+    "accountingSupplierParty": {
+      "type": "object",
+      "properties": {
+        "party": {
+          "type": "object",
+          "properties": {
+            "postalAddress": {
+              "type": "object",
+              "properties": {
+                "streetName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "cityName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "countrySubentity": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "country": {
+                  "type": "object",
+                  "properties": {
+                    "identificationCode": {
+                      "$ref": "classpath:/Schema/Invoice/Master/CountryCode.json"
+                    }
+                  },
+                  "required": [
+                    "identificationCode"
+                  ]
+                }
+              },
+              "if": {
+                "properties": {
+                  "country": {
+                    "properties": {
+                      "identificationCode": {
+                        "const": "AE"
+                      }
+                    }
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "countrySubentity": {
+                    "enum": [
+                      "AUH",
+                      "DXB",
+                      "SHJ",
+                      "UAQ",
+                      "FUJ",
+                      "AJM",
+                      "RAK"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "streetName",
+                "cityName",
+                "countrySubentity",
+                "country"
+              ]
+            },
+            "partyTaxScheme": {
+              "type": "object",
+              "properties": {
+                "companyID": {
+                  "type": "string",
+                  "if": {
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "then": {
+                    "pattern": "^1\\d{9}$"
+                  },
+                  "else": {
+                    "if": {
+                      "minLength": 15,
+                      "maxLength": 15
+                    },
+                    "then": {
+                      "pattern": "^1[A-Za-z0-9]{12}03$"
+                    },
+                    "else": false
+                  }
+                }
+              },
+              "required": [
+                "companyID"
+              ]
+            },
+            "partyLegalEntity": {
+              "type": "object",
+              "properties": {
+                "registrationName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "companyID": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20
+                    },
+                    "schemeAgencyID": {
+                      "$ref": "classpath:/Schema/Invoice/Master/LegalRegistrationIdentifierType.json"
+                    },
+                    "schemeAgencyName": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "schemeAgencyID"
+                  ],
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "schemeAgencyID": {
+                            "enum": [
+                              "TL",
+                              "PAS"
+                            ]
+                          }
+                        }
+                      },
+                      "then": {
+                        "required": [
+                          "schemeAgencyName"
+                        ]
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "schemeAgencyID": {
+                            "const": "PAS"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "schemeAgencyName": {
+                            "$ref": "classpath:/Schema/Invoice/Master/CountryCode.json"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "registrationName",
+                "companyID"
+              ]
+            }
+          },
+          "required": [
+            "partyLegalEntity",
+            "partyTaxScheme",
+            "postalAddress"
+          ]
+        }
+      },
+      "required": [
+        "party"
+      ]
+    },
+    "accountingCustomerParty": {
+      "type": "object",
+      "properties": {
+        "party": {
+          "type": "object",
+          "properties": {
+            "endpointID": {
+              "type": "object",
+              "properties": {
+                "schemeID": {
+                  "$ref": "classpath:/Schema/Invoice/Master/ElectronicAddressScheme.json"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                }
+              },
+              "required": [
+                "schemeID",
+                "id"
+              ]
+            },
+            "partyIdentification": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "object",
+                  "properties": {
+                    "schemeId": {
+                      "$ref": "classpath:/Schema/Invoice/Master/SchemeIdentifierCode.json"
+                    },
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    }
+                  }
+                }
+              }
+            },
+            "postalAddress": {
+              "type": "object",
+              "properties": {
+                "streetName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "cityName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "countrySubentity": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "country": {
+                  "type": "object",
+                  "properties": {
+                    "identificationCode": {
+                      "$ref": "classpath:/Schema/Invoice/Master/CountryCode.json"
+                    }
+                  },
+                  "required": [
+                    "identificationCode"
+                  ]
+                }
+              },
+              "if": {
+                "properties": {
+                  "country": {
+                    "properties": {
+                      "identificationCode": {
+                        "const": "AE"
+                      }
+                    }
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "countrySubentity": {
+                    "enum": [
+                      "AUH",
+                      "DXB",
+                      "SHJ",
+                      "UAQ",
+                      "FUJ",
+                      "AJM",
+                      "RAK"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "streetName",
+                "cityName",
+                "countrySubentity",
+                "country"
+              ]
+            },
+            "partyTaxScheme": {
+              "type": "object",
+              "properties": {
+                "companyID": {
+                  "type": "string",
+                  "pattern": "^1[A-Za-z0-9]{12}03$"
+                }
+              },
+              "required": [
+                "companyID"
+              ]
+            },
+            "partyLegalEntity": {
+              "type": "object",
+              "properties": {
+                "registrationName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "companyID": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 20
+                    },
+                    "schemeAgencyID": {
+                      "$ref": "classpath:/Schema/Invoice/Master/LegalRegistrationIdentifierType.json"
+                    },
+                    "schemeAgencyName": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "schemeAgencyID"
+                  ]
+                }
+              },
+              "required": [
+                "registrationName",
+                "companyID"
+              ]
+            }
+          },
+          "required": [
+            "endpointID",
+            "partyLegalEntity",
+            "partyTaxScheme",
+            "postalAddress"
+          ]
+        }
+      },
+      "required": [
+        "party"
+      ]
+    },
+    "sellerSupplierParty": {
+      "type": "object",
+      "properties": {
+        "party": {
+          "type": "object",
+          "properties": {
+            "partyIdentification": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^1[A-Za-z0-9]{12}03$"
+                    }
+                  }
+                }
+              },
+              "required": ["id"]
+            }
+          },
+          "required": [
+            "partyIdentification"
+          ]
+        }
+      },
+      "required": [
+        "party"
+      ]
+    },
+    "delivery": {
+      "type": "object",
+      "properties": {
+        "actualDeliveryDate": {
+          "type": "string",
+          "format": "YYYY-MM-DD"
+        },
+        "deliveryLocation": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "object",
+              "properties": {
+                "schemeId": {
+                  "$ref": "classpath:/Schema/Invoice/Master/SchemeIdentifierCode.json"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                }
+              }
+            },
+            "address": {
+              "type": "object",
+              "properties": {
+                "addressLine": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "line": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 300
+                      }
+                    }
+                  }
+                },
+                "streetName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "additionalStreetName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                },
+                "cityName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "postalZone": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 10
+                },
+                "countrySubentity": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "country": {
+                  "type": "object",
+                  "properties": {
+                    "identificationCode": {
+                      "$ref": "classpath:/Schema/Invoice/Master/CountryCode.json"
+                    }
+                  }
+                }
+              },
+              "if": {
+                "properties": {
+                  "country": {
+                    "properties": {
+                      "identificationCode": {
+                        "const": "AE"
+                      }
+                    }
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "countrySubentity": {
+                    "enum": [
+                      "AUH",
+                      "DXB",
+                      "SHJ",
+                      "UAQ",
+                      "FUJ",
+                      "AJM",
+                      "RAK"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deliveryParty": {
+          "type": "object",
+          "properties": {
+            "partyName": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "paymentMeans": {
+      "type": "object",
+      "properties": {
+        "paymentMeansCode": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "code": {
+              "type": "string"
+            }
+          }
+        },
+        "cardAccount": {
+          "type": "object",
+          "properties": {
+            "primaryAccountNumberID": {
+              "type": "string"
+            },
+            "networkID": {
+              "type": "string"
+            },
+            "holderName": {
+              "type": "string"
+            }
+          }
+        },
+        "payeeFinancialAccount": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "object",
+              "properties": {
+                "schemeId": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                }
+              }
+            },
+            "name": {
+              "type": "string"
+            },
+            "financialInstitutionBranch": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "paymentMandate": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "paymentTerms": {
+      "type": "object",
+      "properties": {
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "allowanceCharges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "chargeIndicator": {
+            "type": "boolean"
+          },
+          "amount": {
+            "type": "object",
+            "properties": {
+              "currencyID": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              }
+            }
+          },
+          "baseAmount": {
+            "type": "object",
+            "properties": {
+              "currencyID": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              }
+            }
+          },
+          "taxCategory": {
+            "type": "object",
+            "properties": {
+              "currencyID": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              }
+            }
+          },
+          "allowanceChargeReasonCode": {
+            "type": "string"
+          },
+          "allowanceChargeReason": {
+            "type": "string"
+          },
+          "multiplierFactorNumeric": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "taxTotal": {
+      "type": "object",
+      "properties": {
+        "taxAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "taxSubtotalList": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "taxableAmount": {
+                "type": "object",
+                "properties": {
+                  "currencyID": {
+                    "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000000000,
+                    "multipleOf": 0.01
+                  }
+                },
+                "required": [
+                  "currencyID",
+                  "amount"
+                ]
+              },
+              "taxAmount": {
+                "type": "object",
+                "properties": {
+                  "currencyID": {
+                    "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000000000,
+                    "multipleOf": 0.01
+                  }
+                },
+                "required": [
+                  "currencyID",
+                  "amount"
+                ]
+              },
+              "taxCategory": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "classpath:/Schema/Invoice/Master/TaxCategory.json"
+                  },
+                  "percent": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "multipleOf": 0.01
+                  },
+                  "taxScheme": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "percent"
+                ]
+              }
+            },
+            "required": [
+              "taxAmount",
+              "taxableAmount",
+              "taxCategory"
+            ]
+          }
+        }
+      },
+      "required": [
+        "taxAmount",
+        "taxSubtotalList"
+      ]
+    },
+    "legalMonetaryTotal": {
+      "type": "object",
+      "properties": {
+        "lineExtensionAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "taxExclusiveAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "taxInclusiveAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "allowanceTotalAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "chargeTotalAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "prepaidAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "payableRoundingAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          },
+          "required": [
+            "currencyID",
+            "amount"
+          ]
+        },
+        "payableAmount": {
+          "type": "object",
+          "properties": {
+            "currencyID": {
+              "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+            },
+            "amount": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000,
+              "multipleOf": 0.01
+            }
+          }
+        },
+        "required": [
+          "currencyID",
+          "amount"
+        ]
+      },
+      "required": [
+        "lineExtensionAmount",
+        "taxExclusiveAmount",
+        "taxInclusiveAmount",
+        "payableAmount"
+      ]
+    },
+    "invoiceLine": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "minItems": 1,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 15
+          },
+          "invoicedQuantity": {
+            "type": "object",
+            "properties": {
+              "unitCode": {
+                "$ref": "classpath:/Schema/Invoice/Master/UnitOfMeasurement.json"
+              },
+              "quantity": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 1000000000,
+                "multipleOf": 1
+              }
+            },
+            "required": [
+              "quantity",
+              "unitCode"
+            ]
+          },
+          "lineExtensionAmount": {
+            "type": "object",
+            "properties": {
+              "currencyID": {
+                "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+              },
+              "amount": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000000000,
+                "multipleOf": 0.01
+              }
+            },
+            "required": [
+              "currencyID",
+              "amount"
+            ]
+          },
+          "allowanceCharge": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "chargeIndicator": {
+                  "type": "boolean"
+                },
+                "amount": {
+                  "type": "object",
+                  "properties": {
+                    "currencyID": {
+                      "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+                    },
+                    "amount": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1000000000000,
+                      "multipleOf": 0.01
+                    }
+                  },
+                  "required": [
+                    "currencyID",
+                    "amount"
+                  ]
+                }
+              },
+              "required": [
+                "chargeIndicator",
+                "amount"
+              ]
+            }
+          },
+          "item": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "standardItemIdentification": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 15
+                      }
+                    }
+                  }
+                }
+              },
+              "originCountry": {
+                "type": "object",
+                "properties": {
+                  "identificationCode": {
+                    "$ref": "classpath:/Schema/Invoice/Master/CountryCode.json"
+                  }
+                }
+              },
+              "commodityClassification": {
+                "type": "object",
+                "properties": {
+                  "commodityCode": {
+                    "$ref": "classpath:/Schema/Invoice/Master/ItemType.json"
+                  },
+                  "natureCode": {
+                    "$ref": "classpath:/Schema/Invoice/Master/ProductCategory.json"
+                  },
+                  "itemClassificationCode": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "$ref": "classpath:/Schema/Invoice/Master/ItemClassification.json"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "commodityCode"
+                ]
+              },
+              "classifiedTaxCategory": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "properties": {
+                    "id": {
+                      "$ref": "classpath:/Schema/Invoice/Master/TaxCategory.json"
+                    },
+                    "percent": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "multipleOf": 0.01
+                    },
+                    "taxExemptionReasonCode": {
+                      "$ref": "classpath:/Schema/Invoice/Master/TaxExemptionReason.json"
+                    },
+                    "taxExemptionReason": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ],
+                  "if": {
+                    "properties": {
+                      "id": {
+                        "const": "E"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "taxExemptionReasonCode",
+                      "taxExemptionReason"
+                    ]
+                  }
+                }
+              },
+              "additionalItemProperty": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "value": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "name",
+              "description",
+              "commodityClassification"
+            ]
+          },
+          "price": {
+            "type": "object",
+            "properties": {
+              "priceAmount": {
+                "type": "object",
+                "properties": {
+                  "currencyID": {
+                    "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+                  },
+                  "amount": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000000000,
+                    "multipleOf": 0.01
+                  }
+                }
+              },
+              "baseQuantity": {
+                "type": "object",
+                "properties": {
+                  "unitCode": {
+                    "$ref": "classpath:/Schema/Invoice/Master/UnitOfMeasurement.json"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 1000000000,
+                    "multipleOf": 1
+                  }
+                },
+                "required": [
+                  "unitCode",
+                  "quantity"
+                ]
+              },
+              "allowanceCharge": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "object",
+                    "properties": {
+                      "currencyID": {
+                        "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+                      },
+                      "amount": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1000000000000,
+                        "multipleOf": 0.01
+                      }
+                    },
+                    "required": [
+                      "currencyID",
+                      "amount"
+                    ]
+                  },
+                  "baseAmount": {
+                    "type": "object",
+                    "properties": {
+                      "currencyID": {
+                        "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
+                      },
+                      "amount": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1000000000000,
+                        "multipleOf": 0.01
+                      }
+                    },
+                    "required": [
+                      "currencyID",
+                      "amount"
+                    ]
+                  }
+                },
+                "required": [
+                  "baseAmount"
+                ]
+              }
+            },
+            "required": [
+              "baseQuantity",
+              "priceAmount",
+              "allowanceCharge"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "item",
+          "lineExtensionAmount",
+          "price",
+          "invoicedQuantity",
+          "itemPriceExtension"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "issueDate",
+    "invoiceTypeCode",
+    "profileExecutionID",
+    "documentCurrencyCode",
+    "accountingSupplierParty",
+    "accountingCustomerParty",
+    "taxTotal",
+    "legalMonetaryTotal",
+    "invoiceLine"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "documentCurrencyCode": {
+            "not": {
+              "const": "AED"
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "taxExchangeRate"
+        ],
+        "properties": {
+          "taxExchangeRate": {
+            "required": [
+              "calculationRate"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "documentCurrencyCode": {
+            "const": "AED"
+          }
+        }
+      },
+      "then": {
+        "not": {
+          "required": [
+            "taxExchangeRate"
+          ]
+        },
+        "properties": {
+          "taxExchangeRate": {
+            "not": {
+              "required": [
+                "calculationRate"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profileExecutionID": {
+            "const": "00000100"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "sellerSupplierParty"
+        ]
+      }
+    }
+  ]
+}

@@ -8,10 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /**
@@ -59,10 +59,16 @@ public class Item {
 
     @JacksonXmlProperty(localName = "ClassifiedTaxCategory", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @XmlElement(name = "ClassifiedTaxCategory", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
-    private ClassifiedTaxCategory classifiedTaxCategory;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private List<ClassifiedTaxCategory> classifiedTaxCategory;
+
+    @JacksonXmlProperty(localName = "AdditionalItemIdentification", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    @XmlElement(name = "AdditionalItemIdentification", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    private AdditionalItemIdentification additionalItemIdentification;
 
     @JacksonXmlProperty(localName = "AdditionalItemProperty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @XmlElement(name = "AdditionalItemProperty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
-    private AdditionalItemProperty additionalItemProperty;
+    @JacksonXmlElementWrapper(useWrapping = false)
+    private List<AdditionalItemProperty> additionalItemProperty;
 
 }

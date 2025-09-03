@@ -1,0 +1,12 @@
+{
+  "$id": "CreditNoteReason.json",
+  "type": "string",
+  "enum": [
+    "DL8.61.1.A",
+    "DL8.61.1.B",
+    "DL8.61.1.C",
+    "DL8.61.1.D",
+    "DL8.61.1.E",
+    "VD"
+  ]
+}

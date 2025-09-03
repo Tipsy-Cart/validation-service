@@ -7,14 +7,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.covoro.validationservice.constant.Namespaces;
+import jakarta.xml.bind.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +31,9 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Invoice", namespace = Namespaces.INVOICE_2)
 public class Invoice {
+
+    @XmlAttribute(name = "schemaLocation", namespace = Namespaces.XSI)
+    private final String schemaLocation = Namespaces.INVOICE_2 + Namespaces.SCHEMA_LOCATION;
 
     @JacksonXmlProperty(localName = "CustomizationID", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "CustomizationID", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
@@ -83,6 +83,14 @@ public class Invoice {
     @XmlElement(name = "DocumentCurrencyCode", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     private String documentCurrencyCode;
 
+    @JacksonXmlProperty(localName = "TaxCurrencyCode", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    @XmlElement(name = "TaxCurrencyCode", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    private String taxCurrencyCode;
+
+    @JacksonXmlProperty(localName = "TaxExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    @XmlElement(name = "TaxExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    private TaxExchangeRate taxExchangeRate;
+
     @JacksonXmlProperty(localName = "AccountingCost", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "AccountingCost", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     private String accountingCost;
@@ -94,6 +102,10 @@ public class Invoice {
     @JacksonXmlProperty(localName = "InvoicePeriod", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @XmlElement(name = "InvoicePeriod", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     private InvoicePeriod invoicePeriod;
+
+    @JacksonXmlProperty(localName = "DiscrepancyResponse", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    @XmlElement(name = "DiscrepancyResponse", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    private DiscrepancyResponse discrepancyResponse;
 
     @JacksonXmlProperty(localName = "OrderReference", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @XmlElement(name = "OrderReference", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
@@ -140,6 +152,10 @@ public class Invoice {
     @JacksonXmlProperty(localName = "PayeeParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @XmlElement(name = "PayeeParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     private PayeeParty payeeParty;
+
+    @JacksonXmlProperty(localName = "SellerSupplierParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    @XmlElement(name = "SellerSupplierParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    private SellerSupplierParty sellerSupplierParty;
 
     @JacksonXmlProperty(localName = "BuyerCustomerParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @XmlElement(name = "BuyerCustomerParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)

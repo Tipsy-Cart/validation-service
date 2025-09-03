@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
 
 
@@ -35,6 +35,14 @@ public class ClassifiedTaxCategory {
     @JacksonXmlProperty(localName = "Percent", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "Percent", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     private BigDecimal percent;
+
+    @JacksonXmlProperty(localName = "TaxExemptionReasonCode", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    @XmlElement(name = "TaxExemptionReasonCode", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    private String taxExemptionReasonCode;
+
+    @JacksonXmlProperty(localName = "TaxExemptionReason", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    @XmlElement(name = "TaxExemptionReason", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+    private String taxExemptionReason;
 
     @JacksonXmlProperty(localName = "TaxScheme", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "TaxScheme", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)

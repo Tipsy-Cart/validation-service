@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.*;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,6 +24,6 @@ public class InvoicedQuantity {
 
     @JacksonXmlText
     @XmlValue
-    private String quantity;
+    private Double quantity;
 
 }

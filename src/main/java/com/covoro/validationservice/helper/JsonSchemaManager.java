@@ -38,6 +38,11 @@ public class JsonSchemaManager {
         return this.jsonSchemaErrorMap.computeIfAbsent(id, this::loadJsonSchemaError);
     }
 
+    public void refresh(String id) {
+        this.jsonSchemaMap.remove(id);
+        this.jsonSchemaErrorMap.remove(id);
+    }
+
     private JsonSchema loadJsonSchema(String id) {
         Resource schemaResource = resourceLoader.getResource("classpath:Schema/" + id + "/Schema.json");
         try (InputStream schemaStream = schemaResource.getInputStream()) {
@@ -45,7 +50,7 @@ public class JsonSchemaManager {
                     .formatAssertionsEnabled(true)
                     .build();
             JsonMetaSchema metaSchema = JsonMetaSchema.builder(JsonMetaSchema.getV202012())
-                    .format(new CustomDateFormatValidator())
+                    .format(new DateFormatValidator())
                     .build();
             JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012, builder -> builder.metaSchema(metaSchema));
             return jsonSchemaFactory.getSchema(schemaStream, config);

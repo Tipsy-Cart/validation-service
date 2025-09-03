@@ -16,6 +16,7 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
+import com.networknt.schema.InputFormat;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 import org.kie.api.KieBase;
@@ -33,7 +34,7 @@ public class ValidationHandler {
     private final Logger logger;
     private final JsonSchemaManager jsonSchemaManager;
     private final KieBaseManager kieBaseManager;
-    private static final Pattern ARRAY_INDEX_PATTERN = Pattern.compile("\\[(\\d+)\\]");
+    private static final Pattern ARRAY_INDEX_PATTERN = Pattern.compile("/(\\d+)");
 
     public ValidationHandler(Logger logger, JsonSchemaManager jsonSchemaManager, KieBaseManager kieBaseManager) {
         this.logger = logger;
@@ -42,18 +43,14 @@ public class ValidationHandler {
     }
 
     public Map<String, String> validateJson(String id, String json) {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        JsonNode jsonNode = null;
-        try {
-            jsonNode = mapper.readTree(mapper.writeValueAsString(json));
-        } catch (JsonProcessingException e) {
-            logger.trace("Exception While Creating JsonNode from Json String", e);
-            throw new ValidationServiceException(ValidationServiceError.VALIDATION_SERVICE_EXCEPTION, e.getMessage());
-        }
         JsonSchema schema = jsonSchemaManager.getSchema(id);
-        Set<ValidationMessage> validationMessages = schema.validate(jsonNode);
-        return this.beautifyMessage(validationMessages, jsonSchemaManager.getSchemaError(id));
+        Set<ValidationMessage> validationMessages = schema.validate(json, InputFormat.JSON);
+        Map<String, String> errors = this.beautifyMessage(validationMessages, jsonSchemaManager.getSchemaError(id));
+        return errors;
+    }
+
+    public void reloadJsonSchema(String id) {
+        this.jsonSchemaManager.refresh(id);
     }
 
     public Map<String, String> validateDrool(String id, List<String> groups, String json) {
@@ -88,6 +85,10 @@ public class ValidationHandler {
             String type = vm.getType();
             property = null != property ? "." + property : "";
             String errorKey = location + property + "|" + type;
+            if("pattern".equals(type)) {
+                String pattern = vm.getArguments()[0].toString();
+                errorKey = errorKey + "|" + pattern;
+            }
             System.out.println(errorKey);
             Matcher matcher = ARRAY_INDEX_PATTERN.matcher(errorKey);
             List<Integer> indices = new ArrayList<>();
@@ -100,7 +101,7 @@ public class ValidationHandler {
                     errors.put(validationError.getField(), validationError.getMessage());
                 }
             } else {
-                String path = errorKey.replaceAll("\\[\\d+\\]", "[%d]");
+                String path = errorKey.replaceAll("/(\\d+)", "/%d");
                 ValidationError validationError = errorMap.get(path);
                 if(null != validationError){
                     errors.put(String.format(validationError.getField(), indices.toArray()), validationError.getMessage());

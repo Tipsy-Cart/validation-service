@@ -1,0 +1,10 @@
+{
+  "$id": "TaxExemptionReason.json",
+  "type": "string",
+  "enum": [
+    "DL8.46.1",
+    "DL8.46.2",
+    "DL8.46.3",
+    "DL8.46.4"
+  ]
+}
