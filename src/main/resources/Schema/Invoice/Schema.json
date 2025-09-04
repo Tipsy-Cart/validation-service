@@ -470,6 +470,53 @@
         "party"
       ]
     },
+    "buyerCustomerparty": {
+      "type": "object",
+      "properties": {
+        "party": {
+          "type": "object",
+          "properties": {
+            "partyIdentification": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "if": {
+                        "minLength": 10,
+                        "maxLength": 10
+                      },
+                      "then": {
+                        "pattern": "^1\\d{9}$"
+                      },
+                      "else": {
+                        "if": {
+                          "minLength": 15,
+                          "maxLength": 15
+                        },
+                        "then": {
+                          "pattern": "^1[A-Za-z0-9]{12}03$"
+                        },
+                        "else": false
+                      }
+                    }
+                  }
+                }
+              },
+              "required": ["id"]
+            }
+          },
+          "required": [
+            "partyIdentification"
+          ]
+        }
+      },
+      "required": [
+        "party"
+      ]
+    },
     "delivery": {
       "type": "object",
       "properties": {
@@ -736,7 +783,7 @@
             "amount"
           ]
         },
-        "taxSubtotalList": {
+        "taxSubtotal": {
           "type": "array",
           "minItems": 1,
           "items": {
@@ -815,7 +862,7 @@
       },
       "required": [
         "taxAmount",
-        "taxSubtotalList"
+        "taxSubtotal"
       ]
     },
     "legalMonetaryTotal": {
@@ -1334,6 +1381,20 @@
             }
           }
         }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profileExecutionID": {
+            "const": "00000100"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "sellerSupplierParty"
+        ]
       }
     },
     {

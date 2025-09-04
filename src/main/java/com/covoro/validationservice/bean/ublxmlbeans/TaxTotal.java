@@ -41,6 +41,6 @@ public class TaxTotal {
     @XmlElement(name = "TaxSubtotal", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @JacksonXmlCData
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<TaxSubtotal> taxSubtotalList;
+    private List<TaxSubtotal> taxSubtotal;
 
 }

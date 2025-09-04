@@ -3,6 +3,8 @@ package com.covoro.validationservice.bean;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class JsonHelper {
@@ -12,17 +14,57 @@ public class JsonHelper {
         return result;
     }
 
-    public Double readDouble(DocumentContext context, String path){
-        Double value = context.read(path, Double.class);
-        return null != value ? value : 0.0;
+    public String read(DocumentContext context, String path){
+        return context.read(path, String.class);
+    }
+
+    public BigDecimal readBigDecimal(DocumentContext context, String path){
+        BigDecimal value = context.read(path, BigDecimal.class);
+        value = null != value ? value : BigDecimal.ZERO;
+        return value.setScale(2, RoundingMode.HALF_UP);
     }
 
     public DocumentContext parse(Object json){
         return JsonPath.parse(json);
     }
 
-    public Double sum(List<Object> list) {
-        return list.stream().map(Object::toString).map(Double::valueOf).reduce(Double::sum).orElse(0.0);
+    public BigDecimal add(BigDecimal a, BigDecimal b) {
+        return a.add(b).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal subtract(BigDecimal a, BigDecimal b) {
+        return a.subtract(b).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal multiply(BigDecimal a, BigDecimal b) {
+        return a.multiply(b).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal divide(BigDecimal a, BigDecimal b) {
+        if (a == null || b == null) {
+            return null;
+        }
+        if (BigDecimal.ZERO.compareTo(b) == 0) {
+            throw new ArithmeticException("Division by zero");
+        }
+        return a.divide(b, 2, RoundingMode.HALF_UP);
+    }
+
+    public boolean equals(BigDecimal a, BigDecimal b) {
+        BigDecimal tolerance = new BigDecimal("0.01");
+        return a.subtract(b).abs().compareTo(tolerance) <= 0 ;
+    }
+
+    public boolean equals(BigDecimal a, BigDecimal b, BigDecimal tolerance) {
+        return a.subtract(b).abs().compareTo(tolerance) <= 0 ;
+    }
+
+    public BigDecimal sum(List<Object> list) {
+        return list.stream()
+                .map(Object::toString)
+                .map(BigDecimal::new)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     public boolean log(String msg){

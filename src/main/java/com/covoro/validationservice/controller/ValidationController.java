@@ -61,6 +61,7 @@ public class ValidationController {
 
         }
         //this.convertToXml(ublInvoice);
+        System.out.println(mapper.writeValueAsString(ublInvoice));
         Map<String, String> errors = validationHandler.validateJson(id, mapper.writeValueAsString(ublInvoice));
         if (errors.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS).setPayload("Validation Successful"));
@@ -103,7 +104,7 @@ public class ValidationController {
     }
 
     @PostMapping("${api.validation-service.validation.validate-drool.POST.uri}")
-    public ResponseEntity<ApiResponse> validateDrool(@RequestParam String id,
+    public ResponseEntity<ApiResponse> validateDrool(@PathVariable String id,
                                                      @RequestParam(required = false) List<String> groups,
                                                      @RequestBody String json) {
         Map<String, String> errors = validationHandler.validateDrool(id, groups, json);

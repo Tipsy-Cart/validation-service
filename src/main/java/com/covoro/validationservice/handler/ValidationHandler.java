@@ -1,6 +1,7 @@
 package com.covoro.validationservice.handler;
 
 import com.covoro.validationservice.bean.JsonHelper;
+import com.covoro.validationservice.bean.Taxes;
 import com.covoro.validationservice.bean.ValidationError;
 import com.covoro.validationservice.bean.ValidationResult;
 import com.covoro.validationservice.constant.ValidationServiceError;
@@ -55,12 +56,14 @@ public class ValidationHandler {
 
     public Map<String, String> validateDrool(String id, List<String> groups, String json) {
         ValidationResult results = new ValidationResult();
+        Taxes taxes = new Taxes();
         Configuration config = Configuration.builder()
                 .options(Option.SUPPRESS_EXCEPTIONS)
                 .build();
         KieBase kieBase = kieBaseManager.get(id);
         KieSession kieSession = kieBase.newKieSession();
         kieSession.setGlobal("results", results);
+        kieSession.setGlobal("taxes", taxes);
         kieSession.setGlobal("jsonHelper", new JsonHelper());
         DocumentContext invoiceCtx = JsonPath.using(config).parse(json);
         kieSession.insert(invoiceCtx);
@@ -74,6 +77,7 @@ public class ValidationHandler {
                 }
             }
         }
+        System.out.println(taxes.toString());
         return results.get().stream().collect(Collectors.toMap(ValidationError::getField, ValidationError::getMessage));
     }
 

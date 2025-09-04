@@ -4,7 +4,7 @@
     "message" : "Invoice Number is Mandatory"
   },
   "/id|minLength": {
-    "field" : "InvoiceNumber",
+    "field" : "ID",
     "message" : "Invoice Number Can not be Empty"
   },
   "/id|maxLength": {
@@ -731,95 +731,95 @@
     "field" : "TaxTotal.TaxAmount.amount",
     "message" : "Total tax amount can have maximum 2 decimal places values"
   },
-  "/taxTotal.taxSubtotalList|required": {
+  "/taxTotal.taxSubtotal|required": {
     "field" : "TaxTotal.TaxSubtotal",
     "message" : "Tax Sub Total is mandatory"
   },
-  "/taxTotal/taxSubtotalList|minItems": {
+  "/taxTotal/taxSubtotal|minItems": {
     "field" : "TaxTotal.TaxSubtotal",
     "message" : "At least one Tax Sub Total is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d.taxableAmount|required": {
+  "/taxTotal/taxSubtotal/%d.taxableAmount|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount",
     "message" : "Taxable amount is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxableAmount.currencyID|required": {
+  "/taxTotal/taxSubtotal/%d/taxableAmount.currencyID|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.currencyID",
     "message" : "Taxable amount currency ID is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxableAmount/currencyID|enum": {
+  "/taxTotal/taxSubtotal/%d/taxableAmount/currencyID|enum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.currencyID",
     "message" : "Invalid Taxable amount currency ID"
   },
-  "/taxTotal/taxSubtotalList/%d/taxableAmount.amount|required": {
+  "/taxTotal/taxSubtotal/%d/taxableAmount.amount|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
     "message" : "Taxable amount is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxableAmount/amount|minimum": {
+  "/taxTotal/taxSubtotal/%d/taxableAmount/amount|minimum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
     "message" : "Taxable amount can not be less than 0"
   },
-  "/taxTotal/taxSubtotalList/%d/taxableAmount/amount|maximum": {
+  "/taxTotal/taxSubtotal/%d/taxableAmount/amount|maximum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
     "message" : "Taxable amount can not be more than 1,000,000,000,000"
   },
-  "/taxTotal/taxSubtotalList/%d/taxableAmount/amount|multipleOf": {
+  "/taxTotal/taxSubtotal/%d/taxableAmount/amount|multipleOf": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxableAmount.amount",
     "message" : "Taxable amount can have maximum 2 decimal places values"
   },
-  "/taxTotal/taxSubtotalList/%d.taxAmount|required": {
+  "/taxTotal/taxSubtotal/%d.taxAmount|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount",
     "message" : "Tax amount is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxAmount.currencyID|required": {
+  "/taxTotal/taxSubtotal/%d/taxAmount.currencyID|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.currencyID",
     "message" : "Tax amount currency ID is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxAmount/currencyID|enum": {
+  "/taxTotal/taxSubtotal/%d/taxAmount/currencyID|enum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.currencyID",
     "message" : "Invalid Tax amount currency ID"
   },
-  "/taxTotal/taxSubtotalList/%d/taxAmount.amount|required": {
+  "/taxTotal/taxSubtotal/%d/taxAmount.amount|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
     "message" : "Tax amount is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxAmount/amount|minimum": {
+  "/taxTotal/taxSubtotal/%d/taxAmount/amount|minimum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
     "message" : "Tax amount can not be less than 0"
   },
-  "/taxTotal/taxSubtotalList/%d/taxAmount/amount|maximum": {
+  "/taxTotal/taxSubtotal/%d/taxAmount/amount|maximum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
     "message" : "Tax amount can not be more than 1,000,000,000,000"
   },
-  "/taxTotal/taxSubtotalList/%d/taxAmount/amount|multipleOf": {
+  "/taxTotal/taxSubtotal/%d/taxAmount/amount|multipleOf": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxAmount.amount",
     "message" : "Tax amount can have maximum 2 decimal places values"
   },
-  "/taxTotal/taxSubtotalList/%d.taxCategory|required": {
+  "/taxTotal/taxSubtotal/%d.taxCategory|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory",
     "message" : "Tax category is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxCategory.id|required": {
+  "/taxTotal/taxSubtotal/%d/taxCategory.id|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.ID",
     "message" : "Tax category code is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxCategory/id|enum": {
+  "/taxTotal/taxSubtotal/%d/taxCategory/id|enum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.ID",
     "message" : "Invalid tax category code"
   },
-  "/taxTotal/taxSubtotalList/%d/taxCategory.percent|required": {
+  "/taxTotal/taxSubtotal/%d/taxCategory.percent|required": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
     "message" : "Tax rate is mandatory"
   },
-  "/taxTotal/taxSubtotalList/%d/taxCategory/percent|minimum": {
+  "/taxTotal/taxSubtotal/%d/taxCategory/percent|minimum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
     "message" : "Tax rate can not be less than 0"
   },
-  "/taxTotal/taxSubtotalList/%d/taxCategory/percent|maximum": {
+  "/taxTotal/taxSubtotal/%d/taxCategory/percent|maximum": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
     "message" : "Tax rate can not be more than 100"
   },
-  "/taxTotal/taxSubtotalList/%d/taxCategory/percent|multipleOf": {
+  "/taxTotal/taxSubtotal/%d/taxCategory/percent|multipleOf": {
     "field" : "TaxTotal.TaxSubtotal[%d].TaxCategory.Percent",
     "message" : "Tax rate can have maximum 2 decimal places values"
   },
