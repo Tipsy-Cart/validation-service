@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+@XmlRootElement(name = "SellerSupplierParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
 public class SellerSupplierParty {
 
     @JacksonXmlProperty(localName = "Party", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)

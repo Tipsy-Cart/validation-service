@@ -31,6 +31,7 @@ public class JsonSchemaManager {
     }
 
     public JsonSchema getSchema(String id) {
+        logger.info("Fetching json schema for id: " + id);
         return this.jsonSchemaMap.computeIfAbsent(id, this::loadJsonSchema);
     }
 
@@ -39,11 +40,13 @@ public class JsonSchemaManager {
     }
 
     public void refresh(String id) {
+        logger.info("Clearing json schema for id: " + id);
         this.jsonSchemaMap.remove(id);
         this.jsonSchemaErrorMap.remove(id);
     }
 
     private JsonSchema loadJsonSchema(String id) {
+        logger.info("Loading json schema for id: " + id);
         Resource schemaResource = resourceLoader.getResource("classpath:Schema/" + id + "/Schema.json");
         try (InputStream schemaStream = schemaResource.getInputStream()) {
             SchemaValidatorsConfig config = SchemaValidatorsConfig.builder()
@@ -61,12 +64,13 @@ public class JsonSchemaManager {
     }
 
     private Map<String, ValidationError> loadJsonSchemaError(String id) {
+        logger.info("Loading errors for id: " + id);
         Resource schemaErrorResource = resourceLoader.getResource("classpath:Schema/" + id + "/Error.json");
         try (InputStream schemaErrorStream = schemaErrorResource.getInputStream()) {
             return new ObjectMapper().readValue(schemaErrorStream, new TypeReference<>() {
             });
         } catch (Exception e) {
-            logger.trace("Exception While Loading Json Schema Error for Id: " + id, e);
+            logger.trace("Exception While Loading Error for Id: " + id, e);
             throw new ValidationServiceException(ValidationServiceError.VALIDATION_SERVICE_EXCEPTION, e.getMessage());
         }
     }

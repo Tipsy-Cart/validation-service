@@ -12,6 +12,10 @@
       "type": "string",
       "format": "YYYY-MM-DD"
     },
+    "dueDate": {
+      "type": "string",
+      "format": "YYYY-MM-DD"
+    },
     "invoiceTypeCode": {
       "$ref": "classpath:/Schema/Invoice/Master/InvoiceTypeCode.json"
     },
@@ -54,7 +58,12 @@
         "descriptionCode": {
           "$ref": "classpath:/Schema/Invoice/Master/BillingFrequency.json"
         }
-      }
+      },
+      "required": [
+        "startDate",
+        "endDate",
+        "descriptionCode"
+      ]
     },
     "discrepancyResponse": {
       "type": "object",
@@ -62,7 +71,10 @@
         "responseCode": {
           "$ref": "classpath:/Schema/Invoice/Master/CreditNoteReason.json"
         }
-      }
+      },
+      "required": [
+        "responseCode"
+      ]
     },
     "billingReference": {
       "type": "object",
@@ -79,9 +91,16 @@
               "type": "string",
               "format": "YYYY-MM-DD"
             }
-          }
+          },
+          "required": [
+            "id",
+            "issueDate"
+          ]
         }
-      }
+      },
+      "required": [
+        "invoiceDocumentReference"
+      ]
     },
     "contractDocumentReference": {
       "type": "object",
@@ -416,8 +435,7 @@
                     }
                   },
                   "required": [
-                    "id",
-                    "schemeAgencyID"
+                    "id"
                   ]
                 }
               },
@@ -458,7 +476,9 @@
                   }
                 }
               },
-              "required": ["id"]
+              "required": [
+                "id"
+              ]
             }
           },
           "required": [
@@ -470,7 +490,7 @@
         "party"
       ]
     },
-    "buyerCustomerparty": {
+    "buyerCustomerParty": {
       "type": "object",
       "properties": {
         "party": {
@@ -505,7 +525,9 @@
                   }
                 }
               },
-              "required": ["id"]
+              "required": [
+                "id"
+              ]
             }
           },
           "required": [
@@ -642,11 +664,8 @@
         "paymentMeansCode": {
           "type": "object",
           "properties": {
-            "name": {
-              "type": "string"
-            },
             "code": {
-              "type": "string"
+              "$ref": "classpath:/Schema/Invoice/Master/PaymentMeansCode.json"
             }
           }
         },
@@ -654,13 +673,9 @@
           "type": "object",
           "properties": {
             "primaryAccountNumberID": {
-              "type": "string"
-            },
-            "networkID": {
-              "type": "string"
-            },
-            "holderName": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50
             }
           }
         },
@@ -671,41 +686,33 @@
               "type": "object",
               "properties": {
                 "schemeId": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 10
                 },
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 35
                 }
               }
             },
             "name": {
-              "type": "string"
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300
             },
             "financialInstitutionBranch": {
               "type": "object",
               "properties": {
                 "id": {
-                  "type": "string"
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 11
                 }
               }
             }
           }
-        },
-        "paymentMandate": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    "paymentTerms": {
-      "type": "object",
-      "properties": {
-        "note": {
-          "type": "string"
         }
       }
     },
@@ -856,6 +863,87 @@
               "taxAmount",
               "taxableAmount",
               "taxCategory"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "taxCategory": {
+                      "properties": {
+                        "id": {
+                          "enum": [
+                            "E",
+                            "O"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "taxCategory": {
+                      "not": {
+                        "required": [
+                          "percent"
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "taxCategory": {
+                      "properties": {
+                        "id": {
+                          "const": "Z"
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "taxCategory": {
+                      "properties": {
+                        "percent": {
+                          "const": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "taxCategory": {
+                      "properties": {
+                        "id": {
+                          "enum": [
+                            "E",
+                            "O",
+                            "Z"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "taxAmount": {
+                      "properties": {
+                        "amount": {
+                          "const": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             ]
           }
         }
@@ -1221,7 +1309,34 @@
             "required": [
               "name",
               "description",
-              "commodityClassification"
+              "commodityClassification",
+              "classifiedTaxCategory"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "classifiedTaxCategory": {
+                      "properties": {
+                        "id": {
+                          "enum": [
+                            "E",
+                            "O",
+                            "Z"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "classifiedTaxCategory": {
+                      "maxItems": 1
+                    }
+                  }
+                }
+              }
             ]
           },
           "price": {
@@ -1401,13 +1516,176 @@
       "if": {
         "properties": {
           "profileExecutionID": {
-            "const": "00000100"
+            "const": "10000000"
           }
         }
       },
       "then": {
         "required": [
-          "sellerSupplierParty"
+          "buyerCustomerParty"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "legalMonetaryTotal": {
+            "properties": {
+              "payableAmount": {
+                "properties": {
+                  "amount": {
+                    "not": {
+                      "const": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "dueDate"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "accountingCustomerParty": {
+            "properties": {
+              "party": {
+                "properties": {
+                  "partyIdentification": {
+                    "properties": {
+                      "id": {
+                        "properties": {
+                          "schemeId": {
+                            "const": "0235"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "party": {
+            "properties": {
+              "partyLegalEntity": {
+                "properties": {
+                  "companyID": {
+                    "required": [
+                      "schemeAgencyID"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profileExecutionID": {
+            "const": "00000010"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "delivery": {
+            "properties": {
+              "address": {
+                "required": [
+                  "streetName",
+                  "cityName",
+                  "countrySubentity"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "InvoicePeriod": {
+            "properties": {
+              "DescriptionCode": {
+                "const": "OTH"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "note"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "paymentMeans": {
+            "properties": {
+              "paymentMeansCode": {
+                "properties": {
+                  "code": {
+                    "const": "30"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "paymentMeans": {
+            "properties": {
+              "payeeFinancialAccount": {
+                "required": [
+                  "ID"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "profileExecutionID": {
+          "const": "00010000"
+        }
+      },
+      "then": {
+        "required": [
+          "invoicePeriod"
+        ]
+      }
+    },
+    {
+      "if": {
+        "invoiceTypeCode": {
+          "const": "381"
+        }
+      },
+      "then": {
+        "required": [
+          "discrepancyResponse",
+          "billingReference"
         ]
       }
     }

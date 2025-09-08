@@ -34,6 +34,7 @@ when
     $taxes : List() from collect (Object() from jsonHelper.readList($itemCtx,"$.item.classifiedTaxCategory"))
 then
     for(int i = 0; i<$taxes.size(); i++) {
+               jsonHelper.log("InvoiceLine : " +  " Line item " + $itemIndex + " - Adding Tax " + i);
                DocumentContext taxCtx = jsonHelper.parse($taxes.get(i));
                insert(new JsonFact("Tax",i,taxCtx,$itemFact));
            }
@@ -81,6 +82,7 @@ when
     $price : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.price.allowanceCharge.baseAmount.amount")
     $discount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.price.allowanceCharge.amount.amount")
     $netPrice : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.price.priceAmount.amount")
+    eval(jsonHelper.log("LineItem : " + $itemIndex + " Net Price " + $netPrice + " Discount " + $discount + " Price " + $price))
     $calculatedNetPrice : BigDecimal() from jsonHelper.subtract($price, $discount)
     eval(!jsonHelper.equals($netPrice, $calculatedNetPrice))
 then
@@ -101,10 +103,12 @@ when
     $baseQunatity : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.price.baseQuantity.quantity")
     $invoicedQunatity : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.invoicedQuantity.quantity")
     $netAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.lineExtensionAmount.amount")
+    eval(jsonHelper.log("LineItem : " + $itemIndex + " Total charge " + $totalCharge + " Total allowance " + $totalAllowance + " Net Price " + $netPrice + " Base Quantity " + $baseQunatity + " Invoiced Quantity " + $invoicedQunatity + " Net Amount " + $netAmount))
     $pricePerUnit : BigDecimal() from jsonHelper.divide($netPrice, $baseQunatity)
     $totalPrice : BigDecimal() from jsonHelper.multiply($pricePerUnit, $invoicedQunatity)
     $totalPriceWithCharge : BigDecimal() from jsonHelper.add($totalPrice, $totalCharge)
     $calculatedNetAmount : BigDecimal() from jsonHelper.subtract($totalPriceWithCharge, $totalAllowance)
+    eval(jsonHelper.log("LineItem : " + $itemIndex + " Price/Unit " + $pricePerUnit + " Total Price " + $totalPrice + " Price + Charge " + $totalPriceWithCharge + " Calculated Net Amount " + $calculatedNetAmount))
     eval(!jsonHelper.equals($netAmount, $calculatedNetAmount))
 then
    results.add("InvoiceLine[" + $itemIndex + "].LineExtensionAmount.Amount ", "Net Amount does not match the calculated value (Net Price/Base Quantity * Invoiced Quantity + Sum of Charges - Sum of Discount)");
@@ -120,7 +124,9 @@ when
     $totalTaxPercent : BigDecimal() from jsonHelper.sum($taxList)
     $netAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.lineExtensionAmount.amount")
     $totalTaxAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.itemPriceExtension.taxTotal.taxAmount.amount")
+    eval(jsonHelper.log("LineItem : " + $itemIndex + " Net Amount " + $netAmount + " Total tax percent " + $totalTaxPercent + " Total tax amount " + $totalTaxAmount))
     $calculatedTotalTaxAmount : BigDecimal() from jsonHelper.multiply($netAmount, $totalTaxPercent/100)
+    eval(jsonHelper.log("LineItem : " + $itemIndex + " Calculated Total Tax Amount " + $calculatedTotalTaxAmount))
     eval(!jsonHelper.equals($totalTaxAmount, $calculatedTotalTaxAmount))
 then
    results.add("InvoiceLine[" + $itemIndex + "].ItemPriceExtension.TaxTotal.TaxAmount", "Total tax Amount does not match the calculated value (Net Amount * Sum of all tax rate / 100)");
@@ -135,7 +141,9 @@ when
     $netAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.lineExtensionAmount.amount")
     $totalTaxAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.itemPriceExtension.taxTotal.taxAmount.amount")
     $netAmountWithTax : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.itemPriceExtension.amount.amount")
+    eval(jsonHelper.log("LineItem : " + $itemIndex + " Net Amount " + $netAmount + " Total tax amount " + $totalTaxAmount + " Net Amount with tax " + $netAmountWithTax))
     $calculatedNetAmountWithTax : BigDecimal() from jsonHelper.add($netAmount, $totalTaxAmount)
+    eval(jsonHelper.log("LineItem : " + $itemIndex + " Calculated Net Amount with tax " + $calculatedNetAmountWithTax))
     eval(!jsonHelper.equals($netAmountWithTax, $calculatedNetAmountWithTax))
 then
    results.add("InvoiceLine[" + $itemIndex + "].ItemPriceExtension.Amount", "Net Amount with tax does not match the calculated value (Net Amount + Total tax amount)");
@@ -148,6 +156,7 @@ when
     $netAmountList : List() from collect (Object() from jsonHelper.readList($invoiceCtx,"$.invoiceLine[*].lineExtensionAmount.amount"))
     $calculatedNetAmount : BigDecimal() from jsonHelper.sum($netAmountList)
     $invoiceNetAmount : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.lineExtensionAmount.amount")
+    eval(jsonHelper.log("Invocie Net Amount " + $invoiceNetAmount + " Calculated Net Amount " + $calculatedNetAmount))
     eval(!jsonHelper.equals($invoiceNetAmount, $calculatedNetAmount))
 then
     results.add("Invoice.legalMonetaryTotal.LineExtensionAmount", "Invoice net Amount does not match the calculated value (Sum of all Invoice Line Net Amount)");
@@ -160,6 +169,7 @@ when
     $chargeList : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.allowanceCharge[?(@.chargeIndicator == true)].amount.amount"))
     $calculatedTotalCharge : BigDecimal() from jsonHelper.sum($chargeList)
     $invoiceTotalCharge : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.chargeTotalAmount.amount")
+    eval(jsonHelper.log("Invocie Total Charge " + $invoiceTotalCharge + " Calculated Total Charge " + $calculatedTotalCharge))
     eval(!jsonHelper.equals($invoiceTotalCharge, $calculatedTotalCharge))
 then
     results.add("Invoice.LegalMonetaryTotal.ChargeTotalAmount", "Invoice Charge total Amount does not match the calculated value (Sum of all Invoice Charges)");
@@ -172,6 +182,7 @@ when
     $allowanceList : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.allowanceCharge[?(@.chargeIndicator == false)].amount.amount"))
     $calculatedTotalAllowance : BigDecimal() from jsonHelper.sum($allowanceList)
     $invoiceTotalAllowance : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.allowanceTotalAmount.amount")
+    eval(jsonHelper.log("Invocie Total Allowance " + $invoiceTotalAllowance + " Calculated Total Allowance " + $calculatedTotalAllowance))
     eval(!jsonHelper.equals($invoiceTotalAllowance, $calculatedTotalAllowance))
 then
     results.add("Invoice.LegalMonetaryTotal.AllowanceTotalAmount", "Invoice Allowance total Amount does not match the calculated value (Sum of all Invoice Allowances)");
@@ -187,6 +198,7 @@ when
     $invoiceTotalWithoutTax : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.taxExclusiveAmount.amount")
     $totalPriceWithCharge : BigDecimal() from jsonHelper.add($invoiceNetAmount, $invoiceTotalCharge)
     $calculatedInvoiceTotalWithoutTax : BigDecimal() from jsonHelper.subtract($totalPriceWithCharge, $invoiceTotalAllowance)
+    eval(jsonHelper.log("Invocie Net Amount " + $invoiceNetAmount + "Invocie Total Allowance " + $invoiceTotalAllowance + " Invocie Total Charge " + $invoiceTotalCharge + " Invocie Total Without Tax " + $invoiceTotalWithoutTax + " Calculated Total Without Tax " + $calculatedInvoiceTotalWithoutTax))
     eval(!jsonHelper.equals($invoiceTotalWithoutTax, $calculatedInvoiceTotalWithoutTax))
 then
     results.add("Invoice.LegalMonetaryTotal.TaxExclusiveAmount", "Invoice total Amount without tax does not match the calculated value (Invoice Net Amount + Charge Total Amount - Allowance Total Amount)");
@@ -199,6 +211,7 @@ when
     $invoiceTotalTaxAmount : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.taxTotal.taxAmount.amount")
     $taxTotalList : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.invoiceLine[*].itemPriceExtension.taxTotal.taxAmount.amount"))
     $calculatedTotalTaxAmount : BigDecimal() from jsonHelper.sum($taxTotalList)
+    eval(jsonHelper.log("Invocie Total Tax " + $invoiceTotalTaxAmount + " Calculated Total Tax " + $calculatedTotalTaxAmount))
     eval(!jsonHelper.equals($invoiceTotalTaxAmount, $calculatedTotalTaxAmount))
 then
     results.add("Invoice.TaxTotal.TaxAmount", "Total Tax Amount does not match the calculated value (Sum of total tax of each line item)");
@@ -212,6 +225,7 @@ when
     $invoiceTotalWithoutTax : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.taxExclusiveAmount.amount")
     $invoiceTotalWithTax : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.taxInclusiveAmount.amount")
     $calculatedTotalWithTax : BigDecimal() from jsonHelper.add($invoiceTotalTaxAmount, $invoiceTotalWithoutTax)
+    eval(jsonHelper.log("Invocie Total Without Tax " + $invoiceTotalWithoutTax + " Total tax Amount " + $invoiceTotalTaxAmount + " Invocie Total With Tax " + $invoiceTotalWithTax + " Calculated Total With Tax " + $calculatedTotalWithTax))
     eval(!jsonHelper.equals($invoiceTotalWithTax, $calculatedTotalWithTax))
 then
     results.add("Invoice.LegalMonetaryTotal.TaxInclusiveAmount", "Invoice total Amount with tax does not match the calculated value (Total Without tax + Total tax amount)");
@@ -227,6 +241,7 @@ when
     $payableAmount : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.payableAmount.amount")
     $payableAmountWithoutRounding : BigDecimal() from jsonHelper.subtract($invoiceTotalWithTax, $prepaidAmount)
     $calculatedPayableAmount : BigDecimal() from jsonHelper.subtract($payableAmountWithoutRounding, $payableRoundingAmount)
+    eval(jsonHelper.log("Invocie Total With Tax " + $invoiceTotalWithTax + " Prepaid Amount " + $prepaidAmount + " Payable Rounding Amount " + $payableRoundingAmount + " Payable Amount " + $payableAmount + " Calculated Payable " + $calculatedPayableAmount))
     eval(!jsonHelper.equals($payableAmount, $calculatedPayableAmount))
 then
     results.add("Invoice.LegalMonetaryTotal.PayableAmount", "Invoice Payable Amount does not match the calculated value (Invoice Amount With tax - Prepaid Amount - Payable Rounding Amount)");
@@ -255,6 +270,7 @@ when
     $taxCategory : String() from jsonHelper.read($taxSubTotalCtx, "$.taxCategory.id")
     $taxRate : BigDecimal() from jsonHelper.readBigDecimal($taxSubTotalCtx, "$.taxCategory.percent")
     $calculatedTaxableAmount : BigDecimal() from taxes.getAmount($taxCategory, $taxRate)
+    eval(jsonHelper.log("Taxable Amount " + $taxableAmount + " Calculated Taxable Amount  " + $calculatedTaxableAmount))
     eval(!jsonHelper.equals($taxableAmount, $calculatedTaxableAmount))
 then
     results.add("Invoice.TaxTotal.TaxSubTotal[" + $taxSubTotalIndex + "].TaxableAmount", "Taxable Amount does not match the calculated value (Sum of invoice line net amount having tax category)");
@@ -270,6 +286,7 @@ when
     $taxAmount : BigDecimal() from jsonHelper.readBigDecimal($taxSubTotalCtx, "$.taxAmount.amount")
     $taxRate : BigDecimal() from jsonHelper.readBigDecimal($taxSubTotalCtx, "$.taxCategory.percent")
     $calculatedTaxAmount : BigDecimal() from jsonHelper.multiply($taxableAmount, $taxRate/100)
+    eval(jsonHelper.log("Tax Amount " + $taxAmount + " Calculated Tax Amount  " + $calculatedTaxAmount))
     eval(!jsonHelper.equals($taxAmount, $calculatedTaxAmount))
 then
     results.add("Invoice.TaxTotal.TaxSubTotal[" + $taxSubTotalIndex + "].TaxAmount", "Tax Amount does not match the calculated value (Taxable amount * Tax Rate / 100)");

@@ -7,11 +7,13 @@ import com.covoro.validationservice.constant.AppConstant;
 import com.covoro.validationservice.constant.ValidationServiceError;
 import com.covoro.validationservice.exception.ValidationServiceException;
 import com.covoro.validationservice.handler.ValidationHandler;
+import com.covoro.validationservice.helper.DefaultValueHelper;
 import com.covoro.validationservice.logging.Logger;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -28,43 +30,53 @@ public class ValidationController {
 
     private final Logger logger;
     private final ValidationHandler validationHandler;
+    private final DefaultValueHelper defaultValueHelper;
 
-    public ValidationController(Logger logger, ValidationHandler validationHandler) {
+    public ValidationController(Logger logger, ValidationHandler validationHandler, DefaultValueHelper defaultValueHelper) {
         this.logger = logger;
         this.validationHandler = validationHandler;
+        this.defaultValueHelper = defaultValueHelper;
     }
 
+    @Operation(summary = "Validate JSON")
     @PostMapping("${api.validation-service.validation.validate-json.POST.uri}")
     public ResponseEntity<ApiResponse> validateJson(@PathVariable String id,
                                                     @RequestBody String json) {
         logger.info("Start JSON Validation");
         Map<String, String> errors = validationHandler.validateJson(id, json);
         if (errors.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS).setPayload("Validation Successful"));
+            logger.info("JSON Validation Successful");
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
         } else {
             throw new ValidationServiceException(ValidationServiceError.JSON_VALIDATION_ERROR, errors);
         }
     }
 
+    @Operation(summary = "Validate XML")
     @PostMapping("${api.validation-service.validation.validate-xml.POST.uri}")
     public ResponseEntity<ApiResponse> validateXML(@PathVariable String id,
-                                                   @RequestBody String xml) throws JsonProcessingException {
+                                                   @RequestBody String xml) {
+        logger.info("Start UBL XML Validation");
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         XmlMapper xmlMapper = new XmlMapper();
         Invoice ublInvoice = null;
+        String json;
         try {
+            logger.debug("Converting UBL XML to POJO");
             ublInvoice = xmlMapper.readValue(xml, Invoice.class);
+            defaultValueHelper.add(ublInvoice);
+            json = mapper.writeValueAsString(ublInvoice);
         } catch (JsonProcessingException e) {
             logger.trace("Exception While Converting XML to POJO ", e);
             throw new ValidationServiceException(ValidationServiceError.VALIDATION_SERVICE_EXCEPTION, e.getMessage());
 
         }
-        //this.convertToXml(ublInvoice);
-        System.out.println(mapper.writeValueAsString(ublInvoice));
-        Map<String, String> errors = validationHandler.validateJson(id, mapper.writeValueAsString(ublInvoice));
+        this.convertToXml(ublInvoice);
+        Map<String, String> errors = validationHandler.validateJson(id, json);
         if (errors.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS).setPayload("Validation Successful"));
+            logger.info("XML Validation Successful");
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
         } else {
             if(errors.containsKey("AccountingSupplierParty.Party.PartyLegalEntity.CompanyID.schemeAgencyName")){
                 String message = errors.get("AccountingSupplierParty.Party.PartyLegalEntity.CompanyID.schemeAgencyName");
@@ -93,40 +105,40 @@ public class ValidationController {
             JAXBContext context = JAXBContext.newInstance(Invoice.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-            // Use namespace prefix mapper
             marshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper", new UBLNamespacePrefixMapper());
-
             marshaller.marshal(invoice, System.out);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
     }
 
+    @Operation(summary = "Validate Calculation")
     @PostMapping("${api.validation-service.validation.validate-drool.POST.uri}")
     public ResponseEntity<ApiResponse> validateDrool(@PathVariable String id,
                                                      @RequestParam(required = false) List<String> groups,
-                                                     @RequestBody String json) {
-        Map<String, String> errors = validationHandler.validateDrool(id, groups, json);
-        if (errors.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS).setPayload("Validation Successful"));
-        } else {
-            throw new ValidationServiceException(ValidationServiceError.JSON_VALIDATION_ERROR, errors);
-        }
-    }
-
-    @PostMapping(value = "/test", consumes = "application/xml")
-    public Invoice test(@RequestBody String xml) {
+                                                     @RequestBody String xml) {
+        logger.info("Start Drool Validation");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         XmlMapper xmlMapper = new XmlMapper();
         Invoice ublInvoice = null;
+        String json;
         try {
+            logger.debug("Converting UBL XML to POJO");
             ublInvoice = xmlMapper.readValue(xml, Invoice.class);
+            json = mapper.writeValueAsString(ublInvoice);
         } catch (JsonProcessingException e) {
             logger.trace("Exception While Converting XML to POJO ", e);
             throw new ValidationServiceException(ValidationServiceError.VALIDATION_SERVICE_EXCEPTION, e.getMessage());
 
         }
-        return ublInvoice;
+        Map<String, String> errors = validationHandler.validateDrool(id, groups, json);
+        if (errors.isEmpty()) {
+            logger.info("Drool Validation Successful");
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
+        } else {
+            throw new ValidationServiceException(ValidationServiceError.JSON_VALIDATION_ERROR, errors);
+        }
     }
 
     @PostMapping(value = "/json/{id}")

@@ -13,7 +13,7 @@
   },
   ".note|required": {
     "field" : "Note",
-    "message" : "Invoice Note is Mandatory"
+    "message" : "Invoice Note is Mandatory when Billing frequency is others"
   },
   "/note|minLength": {
     "field" : "Note",
@@ -30,6 +30,14 @@
   "/issueDate|format": {
     "field" : "IssueDate",
     "message" : "Issue date must be valid date in YYYY-MM-DD format"
+  },
+  ".dueDate|required": {
+    "field" : "DueDate",
+    "message" : "Payment due date is required when amount due for payment is greater than 0"
+  },
+  "/dueDate|format": {
+    "field" : "DueDate",
+    "message" : "Due date must be valid date in YYYY-MM-DD format"
   },
   ".invoiceTypeCode|required": {
     "field" : "InvoiceTypeCode",
@@ -79,21 +87,49 @@
     "field" : "TaxExchangeRate.CalculationRate",
     "message" : "CalculationRate value can have maximum 6 decimal places values"
   },
+  ".billingReference|required": {
+    "field" : "BillingReference",
+    "message" : "Preceding invoice detail is mandatory for Credit Note"
+  },
+  "/billingReference.invoiceDocumentReference|required": {
+    "field" : "BillingReference.InvoiceDocumentReference",
+    "message" : "Preceding invoice detail is mandatory for Credit Note"
+  },
+  "/billingReference/InvoiceDocumentReference.id|required": {
+    "field" : "BillingReference",
+    "message" : "Preceding Invoice Number is mandatory for Credit Note"
+  },
   "/billingReference/invoiceDocumentReference/id|minLength": {
   "field" : "BillingReference.InvoiceDocumentReference.ID",
-  "message" : "Preceding invoice Number Can not be Empty"
+  "message" : "Preceding Invoice Number Can not be Empty"
  },
   "/billingReference/invoiceDocumentReference/id|maxLength": {
     "field" : "BillingReference.InvoiceDocumentReference.ID",
     "message" : "Preceding invoice Number Can not be have more than 64 Characters"
   },
+  "/billingReference/InvoiceDocumentReference.issueDate|required": {
+    "field" : "BillingReference",
+    "message" : "Preceding invoice issue date is mandatory for Credit Note"
+  },
   "/billingReference/invoiceDocumentReference/issueDate|format": {
     "field" : "BillingReference.InvoiceDocumentReference.IssueDate",
     "message" : "Preceding invoice issue date must be valid date in YYYY-MM-DD format"
   },
+  ".invoicePeriod|required": {
+    "field" : "InvoicePeriod.StartDate",
+    "message" : "Invoice Period is mandatory for Summary Invoice"
+  },
+  "/invoicePeriod.startDate|required": {
+    "field" : "InvoicePeriod.StartDate",
+    "message" : "Start date is mandatory when Invoice Period is Present"
+  },
   "/invoicePeriod/startDate|format": {
     "field" : "InvoicePeriod.StartDate",
     "message" : "Invoicing period start date must be valid date in YYYY-MM-DD format"
+  },
+  "/invoicePeriod.endDate|required": {
+    "field" : "InvoicePeriod.EndDate",
+    "message" : "End date is mandatory when Invoice Period is Present"
   },
   "/invoicePeriod/endDate|format": {
     "field" : "InvoicePeriod.EndDate",
@@ -281,7 +317,7 @@
   },
   "/accountingCustomerParty/party/partyLegalEntity/companyID.schemeAgencyID|required": {
     "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID.schemeAgencyID",
-    "message" : "Buyer legal registration identifier type is Mandatory"
+    "message" : "Buyer legal registration identifier type is Mandatory when Scheme identifier is 0235"
   },
   "/accountingCustomerParty/party/partyLegalEntity/companyID/schemeAgencyID|enum": {
     "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID.schemeAgencyID",
@@ -415,6 +451,10 @@
     "field" : "Delivery.DeliveryLocation.ActualDeliveryDate",
     "message" : "Actual Delivery date must be valid date in YYYY-MM-DD format"
   },
+  "/delivery/deliveryLocation/address.streetName|required": {
+    "field" : "Delivery.DeliveryLocation.Address.StreetName",
+    "message" : "Delivery Address Line One is mandatory for E-commerce supplies"
+  },
   "/delivery/deliveryLocation/address/streetName|minLength": {
     "field" : "Delivery.DeliveryLocation.Address.StreetName",
     "message" : "Delivery Address Line One Can not be Empty"
@@ -439,6 +479,10 @@
     "field" : "Delivery.DeliveryLocation.Address.AddressLine[%d].Line",
     "message" : "Delivery Address Line Can not be more than 300 characters long"
   },
+  "/delivery/deliveryLocation/address.cityName|required": {
+    "field" : "Delivery.DeliveryLocation.Address.CityName",
+    "message" : "Delivery City name is mandatory for E-commerce supplies"
+  },
   "/delivery/deliveryLocation/address/cityName|minLength": {
     "field" : "Delivery.DeliveryLocation.Address.CityName",
     "message" : "Delivery City name Can not be Empty"
@@ -454,6 +498,10 @@
   "/delivery/deliveryLocation/address/postalZone|maxLength": {
     "field" : "Delivery.DeliveryLocation.Address.PostalZone",
     "message" : "Delivery Post Code Can not be more than 10 characters long"
+  },
+  "/delivery/deliveryLocation/address.countrySubentity|required": {
+    "field" : "Delivery.DeliveryLocation.Address.CountrySubentity",
+    "message" : "Delivery Country Sub Division is mandatory for E-commerce supplies"
   },
   "/delivery/deliveryLocation/address/countrySubentity|minLength": {
     "field" : "Delivery.DeliveryLocation.Address.CountrySubentity",
@@ -490,6 +538,34 @@
   "/sellerSupplierParty/party/partyIdentification/id/id|pattern|^1[A-Za-z0-9]{12}03$": {
     "field" : "SellerSupplierParty.Party.PartyIdentification.ID",
     "message" : "Principal ID must be 15 alpha numeric digits and should be of the format 1XXXXXXXXXXXXX03"
+  },
+  ".buyerCustomerParty|required": {
+    "field" : "BuyerCustomerParty",
+    "message" : "Beneficiary ID is mandatory for Free Trade Zone"
+  },
+  "/buyerCustomerParty.party|required": {
+    "field" : "BuyerCustomerParty.Party",
+    "message" : "Beneficiary ID is mandatory for Free Trade Zone"
+  },
+  "/buyerCustomerParty/party.partyIdentification|required": {
+    "field" : "BuyerCustomerParty.Party.PartyIdentification",
+    "message" : "Beneficiary ID is mandatory for Free Trade Zone"
+  },
+  "/buyerCustomerParty/party/partyIdentification.id|required": {
+    "field" : "BuyerCustomerParty.Party.PartyIdentification.ID",
+    "message" : "Beneficiary ID is mandatory for Free Trade Zone"
+  },
+  "/buyerCustomerParty/party/partyIdentification/id/id|false": {
+    "field" : "BuyerCustomerParty.Party.PartyIdentification.ID",
+    "message" : "Please provide either 10 digit TIN or 15 digit TRN"
+  },
+  "/buyerCustomerParty/party/partyIdentification/id/id|pattern|^1\\d{9}$": {
+    "field" : "BuyerCustomerParty.Party.PartyIdentification.ID",
+    "message" : "Beneficiary ID TIN must be 10 numeric digits and should be of the format 1XXXXXXXXXX"
+  },
+  "/buyerCustomerParty/party/partyIdentification/id/id|pattern|^1[A-Za-z0-9]{12}03$": {
+    "field" : "BuyerCustomerParty.Party.PartyIdentification.ID",
+    "message" : "Beneficiary ID TRN must be 15 alpha numeric digits and should be of the format 1XXXXXXXXXXXXX03"
   },
   "/legalMonetaryTotal.lineExtensionAmount|required": {
     "field" : "LegalMonetaryTotal.LineExtensionAmount",
@@ -1190,6 +1266,67 @@
   "/invoiceLine/%d/item/additionalItemProperty/%d/value|maxLength": {
     "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Value",
     "message" : "Item Attribute value can not have more than 300 characters"
+  },
+  "/paymentMeans/paymentMeansCode/code|enum": {
+    "field" : "PaymentMeans.PaymentMeansCode",
+    "message" : "Invalid Payment means code"
+  },
+  "/paymentMeans/payeeFinancialAccount/id.id|required": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.ID",
+    "message" : "Payment account identifier is mandatory for credit transfer"
+  },
+  "/paymentMeans/payeeFinancialAccount/id/id|minLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.ID",
+    "message" : "Payment account identifier can not be empty"
+  },
+  "/paymentMeans/payeeFinancialAccount/id/id|maxLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.ID",
+    "message" : "Payment account identifier can not be more than 35 characters"
+  },
+  "/paymentMeans/payeeFinancialAccount/id/schemeId|minLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.ID.schemeId",
+    "message" : "Payment account scheme identifier can not be empty"
+  },
+  "/paymentMeans/payeeFinancialAccount/id/schemeId|maxLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.ID.schemeId",
+    "message" : "Payment account scheme identifier can not be more than 10 characters"
+  },
+  "/paymentMeans/payeeFinancialAccount/name|minLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.Name",
+    "message" : "Payment account name can not be empty"
+  },
+  "/paymentMeans/payeeFinancialAccount/name|maxLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.Name",
+    "message" : "Payment account name can not be more than 300 characters"
+  },
+  "/paymentMeans/payeeFinancialAccount/financialInstitutionBranch/id|minLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.FinancialInstitutionBranch.ID",
+    "message" : "Payment service provider identifier can not be empty"
+  },
+  "/paymentMeans/payeeFinancialAccount/financialInstitutionBranch/id|maxLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.FinancialInstitutionBranch.ID",
+    "message" : "Payment service provider identifier can not be more than 11 characters"
+  },
+  "/paymentMeans/cardAccount/primaryAccountNumberID|minLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.FinancialInstitutionBranch.ID",
+    "message" : "Payment card primary account number can not be empty"
+  },
+  "/paymentMeans/cardAccount/primaryAccountNumberID|maxLength": {
+    "field" : "PaymentMeans.PayeeFinancialAccount.FinancialInstitutionBranch.ID",
+    "message" : "Payment card primary account number can not be more than 50 characters"
+  },
+  ".discrepancyResponse|required": {
+    "field" : "DiscrepancyResponse",
+    "message" : "Credit note reason code is mandatory for Credit Note"
+  },
+  "/discrepancyResponse.responseCode|required": {
+    "field" : "DiscrepancyResponse.ResponseCode",
+    "message" : "Credit note reason code is mandatory for Credit Note"
+  },
+  "/discrepancyResponse/responseCode|enum": {
+    "field" : "DiscrepancyResponse.ResponseCode",
+    "message" : "Invalid Credit note reason code"
   }
+
 
 }

@@ -23,11 +23,11 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "AccountingCustomerParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+@XmlRootElement(name = "BuyerCustomerParty", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
 public class BuyerCustomerParty {
 
     @JacksonXmlProperty(localName = "Party", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
     @XmlElement(name = "Party", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
-    private BuyerParty buyerParty;
+    private Party party;
 
 }

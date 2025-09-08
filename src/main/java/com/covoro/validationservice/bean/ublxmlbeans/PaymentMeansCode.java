@@ -22,7 +22,7 @@ import jakarta.xml.bind.annotation.*;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "ID", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
+@XmlRootElement(name = "PaymentMeansCode", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
 public class PaymentMeansCode {
 
     @JacksonXmlProperty(localName = "name", isAttribute = true, namespace = Namespaces.COMMON_BASIC_COMPONENT_2)

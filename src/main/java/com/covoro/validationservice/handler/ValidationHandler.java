@@ -4,15 +4,9 @@ import com.covoro.validationservice.bean.JsonHelper;
 import com.covoro.validationservice.bean.Taxes;
 import com.covoro.validationservice.bean.ValidationError;
 import com.covoro.validationservice.bean.ValidationResult;
-import com.covoro.validationservice.constant.ValidationServiceError;
-import com.covoro.validationservice.exception.ValidationServiceException;
 import com.covoro.validationservice.helper.JsonSchemaManager;
 import com.covoro.validationservice.helper.KieBaseManager;
 import com.covoro.validationservice.logging.Logger;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -44,6 +38,7 @@ public class ValidationHandler {
     }
 
     public Map<String, String> validateJson(String id, String json) {
+        logger.info("Start validating json");
         JsonSchema schema = jsonSchemaManager.getSchema(id);
         Set<ValidationMessage> validationMessages = schema.validate(json, InputFormat.JSON);
         Map<String, String> errors = this.beautifyMessage(validationMessages, jsonSchemaManager.getSchemaError(id));
@@ -51,10 +46,12 @@ public class ValidationHandler {
     }
 
     public void reloadJsonSchema(String id) {
+        logger.info("Clearing json schema for id: " + id);
         this.jsonSchemaManager.refresh(id);
     }
 
     public Map<String, String> validateDrool(String id, List<String> groups, String json) {
+        logger.info("Start validating json");
         ValidationResult results = new ValidationResult();
         Taxes taxes = new Taxes();
         Configuration config = Configuration.builder()
@@ -67,17 +64,17 @@ public class ValidationHandler {
         kieSession.setGlobal("jsonHelper", new JsonHelper());
         DocumentContext invoiceCtx = JsonPath.using(config).parse(json);
         kieSession.insert(invoiceCtx);
-        if(null != groups && !groups.isEmpty()){
-            for(int i = 0; i < groups.size(); i++){
+        if (null != groups && !groups.isEmpty()) {
+            for (int i = 0; i < groups.size(); i++) {
                 kieSession.getAgenda().getAgendaGroup(groups.get(i)).setFocus();
                 kieSession.fireAllRules();
-                if(!results.get().isEmpty()){
+                if (!results.get().isEmpty()) {
                     kieSession.dispose();
                     break;
                 }
             }
         }
-        System.out.println(taxes.toString());
+        //System.out.println(taxes.toString());
         return results.get().stream().collect(Collectors.toMap(ValidationError::getField, ValidationError::getMessage));
     }
 
@@ -89,7 +86,7 @@ public class ValidationHandler {
             String type = vm.getType();
             property = null != property ? "." + property : "";
             String errorKey = location + property + "|" + type;
-            if("pattern".equals(type)) {
+            if ("pattern".equals(type)) {
                 String pattern = vm.getArguments()[0].toString();
                 errorKey = errorKey + "|" + pattern;
             }
@@ -99,15 +96,15 @@ public class ValidationHandler {
             while (matcher.find()) {
                 indices.add(Integer.parseInt(matcher.group(1)));
             }
-            if(indices.isEmpty()){
+            if (indices.isEmpty()) {
                 ValidationError validationError = errorMap.get(errorKey);
-                if(null != validationError){
+                if (null != validationError) {
                     errors.put(validationError.getField(), validationError.getMessage());
                 }
             } else {
                 String path = errorKey.replaceAll("/(\\d+)", "/%d");
                 ValidationError validationError = errorMap.get(path);
-                if(null != validationError){
+                if (null != validationError) {
                     errors.put(String.format(validationError.getField(), indices.toArray()), validationError.getMessage());
                 }
             }
