@@ -11,23 +11,22 @@ public class DefaultValueHelper {
         if (!"AED".equals(documentCurrencyCode))
             invoice.setTaxCurrencyCode("AED");
         LegalMonetaryTotal legalMonetaryTotal = invoice.getLegalMonetaryTotal();
-        legalMonetaryTotal.getLineExtensionAmount().setCurrencyID(documentCurrencyCode);
-        legalMonetaryTotal.getTaxExclusiveAmount().setCurrencyID(documentCurrencyCode);
-        legalMonetaryTotal.getTaxInclusiveAmount().setCurrencyID(documentCurrencyCode);
-        legalMonetaryTotal.getAllowanceTotalAmount().setCurrencyID(documentCurrencyCode);
-        legalMonetaryTotal.getChargeTotalAmount().setCurrencyID(documentCurrencyCode);
-        legalMonetaryTotal.getPrepaidAmount().setCurrencyID(documentCurrencyCode);
-        legalMonetaryTotal.getPayableRoundingAmount().setCurrencyID(documentCurrencyCode);
-        legalMonetaryTotal.getPayableAmount().setCurrencyID(documentCurrencyCode);
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getLineExtensionAmount());
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getTaxExclusiveAmount());
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getTaxInclusiveAmount());
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getAllowanceTotalAmount());
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getChargeTotalAmount());
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getPrepaidAmount());
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getPayableRoundingAmount());
+        this.addCurrencyCode(documentCurrencyCode, legalMonetaryTotal.getPayableAmount());
         invoice.setLegalMonetaryTotal(legalMonetaryTotal);
 
         TaxTotal taxTotal = invoice.getTaxTotal();
-        taxTotal.getTaxAmount().setCurrencyID(documentCurrencyCode);
+        this.addCurrencyCode(documentCurrencyCode, taxTotal.getTaxAmount());
         taxTotal.setTaxSubtotal(taxTotal.getTaxSubtotal().stream().map(taxSubtotal -> this.addCurrencyCode(documentCurrencyCode, taxSubtotal)).toList());
 
         invoice.setInvoiceLine(invoice.getInvoiceLine().stream().map(invoiceLine -> this.addCurrencyCode(documentCurrencyCode, invoiceLine)).toList());
-        invoice.getAccountingSupplierParty().getParty().getPartyTaxScheme().getTaxScheme().setId("VAT");
-        invoice.getAccountingCustomerParty().getParty().getPartyTaxScheme().getTaxScheme().setId("VAT");
+        this.addTaxScheme(invoice);
         //TODO Change based upon Document Type
         invoice.setProfileID("urn:peppol:bis:billing");
         invoice.setCustomizationID("urn:peppol:pint:billing- 1@ae-1");
@@ -35,34 +34,75 @@ public class DefaultValueHelper {
     }
 
     private TaxSubtotal addCurrencyCode(String documentCurrencyCode, TaxSubtotal taxSubtotal) {
-        taxSubtotal.getTaxAmount().setCurrencyID(documentCurrencyCode);
-        taxSubtotal.getTaxableAmount().setCurrencyID(documentCurrencyCode);
+        this.addCurrencyCode(documentCurrencyCode, taxSubtotal.getTaxAmount());
+        this.addCurrencyCode(documentCurrencyCode,taxSubtotal.getTaxableAmount());
         return taxSubtotal;
     }
 
     private InvoiceLine addCurrencyCode(String documentCurrencyCode, InvoiceLine invoiceLine) {
-        invoiceLine.getLineExtensionAmount().setCurrencyID(documentCurrencyCode);
+        this.addCurrencyCode(documentCurrencyCode, invoiceLine.getLineExtensionAmount());
         invoiceLine.setAllowanceCharge(invoiceLine.getAllowanceCharge().stream().map(allowanceCharge -> this.addCurrencyCode(documentCurrencyCode, allowanceCharge)).toList());
         invoiceLine.setPrice(this.addCurrencyCode(documentCurrencyCode, invoiceLine.getPrice()));
-        invoiceLine.getItem().getStandardItemIdentification().getId().setSchemeId("0160");
-        invoiceLine.getItem().getCommodityClassification().getItemClassificationCode().setListID("HS");
-        invoiceLine.getItem().getAdditionalItemIdentification().getId().setSchemeId("SAC");
+        this.addItemClassification(invoiceLine);
         return invoiceLine;
     }
 
     private AllowanceCharge addCurrencyCode(String documentCurrencyCode, AllowanceCharge allowanceCharge) {
-        allowanceCharge.getAmount().setCurrencyID(documentCurrencyCode);
+        this.addCurrencyCode(documentCurrencyCode, allowanceCharge.getAmount());
         return allowanceCharge;
     }
 
     private Price addCurrencyCode(String documentCurrencyCode, Price price) {
-        price.getPriceAmount().setCurrencyID(documentCurrencyCode);
+        this.addCurrencyCode(documentCurrencyCode, price.getPriceAmount());
         AllowanceCharge allowanceCharge = price.getAllowanceCharge();
-        allowanceCharge.getBaseAmount().setCurrencyID(documentCurrencyCode);
-        allowanceCharge.getAmount().setCurrencyID(documentCurrencyCode);
-        allowanceCharge.setChargeIndicator(false);
-        price.setAllowanceCharge(allowanceCharge);
+        if (null != allowanceCharge) {
+            this.addCurrencyCode(documentCurrencyCode, allowanceCharge.getBaseAmount());
+            this.addCurrencyCode(documentCurrencyCode, allowanceCharge.getAmount());
+            allowanceCharge.setChargeIndicator(false);
+            price.setAllowanceCharge(allowanceCharge);
+        }
         return price;
+    }
+
+    private void addCurrencyCode(String documentCurrencyCode, Amount amount) {
+        if(null != amount)
+            amount.setCurrencyID(documentCurrencyCode);
+    }
+
+    private void addTaxScheme(Invoice invoice) {
+        if(null != invoice
+                && null != invoice.getAccountingSupplierParty()
+                && null != invoice.getAccountingSupplierParty().getParty()
+                && null != invoice.getAccountingSupplierParty().getParty().getPartyTaxScheme()
+                && null != invoice.getAccountingSupplierParty().getParty().getPartyTaxScheme().getTaxScheme())
+            invoice.getAccountingSupplierParty().getParty().getPartyTaxScheme().getTaxScheme().setId("VAT");
+
+        if(null != invoice
+                && null != invoice.getAccountingCustomerParty()
+                && null != invoice.getAccountingCustomerParty().getParty()
+                && null != invoice.getAccountingCustomerParty().getParty().getPartyTaxScheme()
+                && null != invoice.getAccountingCustomerParty().getParty().getPartyTaxScheme().getTaxScheme())
+            invoice.getAccountingCustomerParty().getParty().getPartyTaxScheme().getTaxScheme().setId("VAT");
+    }
+
+    private void addItemClassification(InvoiceLine invoiceLine) {
+        if(null != invoiceLine
+                && null != invoiceLine.getItem()
+                && null != invoiceLine.getItem().getStandardItemIdentification()
+                && null != invoiceLine.getItem().getStandardItemIdentification().getId())
+            invoiceLine.getItem().getStandardItemIdentification().getId().setSchemeId("0160");
+
+        if(null != invoiceLine
+                && null != invoiceLine.getItem()
+                && null != invoiceLine.getItem().getCommodityClassification()
+                && null != invoiceLine.getItem().getCommodityClassification().getItemClassificationCode())
+            invoiceLine.getItem().getCommodityClassification().getItemClassificationCode().setListID("HS");
+
+        if(null != invoiceLine
+                && null != invoiceLine.getItem()
+                && null != invoiceLine.getItem().getAdditionalItemIdentification()
+                && null != invoiceLine.getItem().getAdditionalItemIdentification().getId())
+            invoiceLine.getItem().getAdditionalItemIdentification().getId().setSchemeId("SAC");
     }
 
 }
