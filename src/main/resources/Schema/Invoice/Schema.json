@@ -857,7 +857,60 @@
                   "id",
                   "percent"
                 ]
-              }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "id": {
+                        "const": "S"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "percent": {
+                        "const": 5
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "id": {
+                        "const": "Z"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "percent": {
+                        "const": 0
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "id": {
+                        "enum": [
+                          "E",
+                          "O"
+                        ]
+                      }
+                    }
+                  },
+                  "then": {
+                    "not": {
+                      "required": [
+                        "percent"
+                      ]
+                    }
+                  }
+                }
+              ]
             },
             "required": [
               "taxAmount",
@@ -871,62 +924,7 @@
                     "taxCategory": {
                       "properties": {
                         "id": {
-                          "enum": [
-                            "E",
-                            "O"
-                          ]
-                        }
-                      }
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "taxCategory": {
-                      "not": {
-                        "required": [
-                          "percent"
-                        ]
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "taxCategory": {
-                      "properties": {
-                        "id": {
-                          "const": "Z"
-                        }
-                      }
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "taxCategory": {
-                      "properties": {
-                        "percent": {
-                          "const": 0
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "taxCategory": {
-                      "properties": {
-                        "id": {
-                          "enum": [
-                            "E",
-                            "O",
-                            "Z"
-                          ]
+                          "enum": ["Z","E","O"]
                         }
                       }
                     }
@@ -1272,19 +1270,74 @@
                   "required": [
                     "id"
                   ],
-                  "if": {
-                    "properties": {
-                      "id": {
-                        "const": "E"
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "id": {
+                            "const": "E"
+                          }
+                        }
+                      },
+                      "then": {
+                        "required": [
+                          "taxExemptionReasonCode",
+                          "taxExemptionReason"
+                        ]
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "id": {
+                            "const": "S"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "percent": {
+                            "const": 5
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "id": {
+                            "const": "Z"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "percent": {
+                            "const": 0
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "if": {
+                        "properties": {
+                          "id": {
+                            "enum": [
+                              "E",
+                              "O"
+                            ]
+                          }
+                        }
+                      },
+                      "then": {
+                        "not": {
+                          "required": [
+                            "percent"
+                          ]
+                        }
                       }
                     }
-                  },
-                  "then": {
-                    "required": [
-                      "taxExemptionReasonCode",
-                      "taxExemptionReason"
-                    ]
-                  }
+                  ]
                 }
               },
               "additionalItemProperty": {
@@ -1317,13 +1370,39 @@
                 "if": {
                   "properties": {
                     "classifiedTaxCategory": {
-                      "properties": {
-                        "id": {
-                          "enum": [
-                            "E",
-                            "O",
-                            "Z"
-                          ]
+                      "contains": {
+                        "properties": {
+                          "id": {
+                            "const": "AE"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "commodityClassification": {
+                      "required": [
+                        "natureCode"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "classifiedTaxCategory": {
+                      "contains": {
+                        "properties": {
+                          "id": {
+                            "enum": [
+                              "E",
+                              "O",
+                              "Z"
+                            ]
+                          }
                         }
                       }
                     }

@@ -1,6 +1,6 @@
 {
   ".id|required": {
-    "field" : "InvoiceNumber",
+    "field" : "ID",
     "message" : "Invoice Number is Mandatory"
   },
   "/id|minLength": {
@@ -8,7 +8,7 @@
     "message" : "Invoice Number Can not be Empty"
   },
   "/id|maxLength": {
-    "field" : "InvoiceNumber",
+    "field" : "ID",
     "message" : "Invoice Number Can not be have more than 64 Characters"
   },
   ".note|required": {
@@ -49,11 +49,11 @@
   },
   ".profileExecutionID|required": {
     "field" : "ProfileExecutionID",
-    "message" : "Profile Execution ID is Mandatory"
+    "message" : "Invoice Transaction Type is Mandatory"
   },
   "/profileExecutionID|enum": {
     "field" : "ProfileExecutionID",
-    "message" : "Invalid Profile Execution ID"
+    "message" : "Invalid Invoice Transaction Type"
   },
   ".documentCurrencyCode|required": {
   "field" : "DocumentCurrencyCode",
@@ -81,7 +81,7 @@
   },
   "/taxExchangeRate/calculationRate|maximum": {
     "field" : "TaxExchangeRate.CalculationRate",
-    "message" : "CalculationRate value cannot be more than 1000000"
+    "message" : "CalculationRate value cannot be more than 1,000,000"
   },
   "/taxExchangeRate/calculationRate|multipleOf": {
     "field" : "TaxExchangeRate.CalculationRate",
@@ -109,11 +109,11 @@
   },
   "/billingReference/InvoiceDocumentReference.issueDate|required": {
     "field" : "BillingReference",
-    "message" : "Preceding invoice issue date is mandatory for Credit Note"
+    "message" : "Preceding Invoice Issue Date is mandatory for Credit Note"
   },
   "/billingReference/invoiceDocumentReference/issueDate|format": {
     "field" : "BillingReference.InvoiceDocumentReference.IssueDate",
-    "message" : "Preceding invoice issue date must be valid date in YYYY-MM-DD format"
+    "message" : "Preceding Invoice Issue Date must be valid date in YYYY-MM-DD format"
   },
   ".invoicePeriod|required": {
     "field" : "InvoicePeriod.StartDate",
@@ -121,7 +121,7 @@
   },
   "/invoicePeriod.startDate|required": {
     "field" : "InvoicePeriod.StartDate",
-    "message" : "Start date is mandatory when Invoice Period is Present"
+    "message" : "Start date is mandatory for Invoice Period"
   },
   "/invoicePeriod/startDate|format": {
     "field" : "InvoicePeriod.StartDate",
@@ -129,11 +129,15 @@
   },
   "/invoicePeriod.endDate|required": {
     "field" : "InvoicePeriod.EndDate",
-    "message" : "End date is mandatory when Invoice Period is Present"
+    "message" : "End date is mandatory for Invoice Period"
   },
   "/invoicePeriod/endDate|format": {
     "field" : "InvoicePeriod.EndDate",
     "message" : "Invoicing period end date must be valid date in YYYY-MM-DD format"
+  },
+  "/invoicePeriod.descriptionCode|required": {
+    "field" : "InvoicePeriod.DescriptionCode",
+    "message" : "Invalid Billing Frequency is mandatory for Invoice Period"
   },
   "/invoicePeriod/descriptionCode|enum": {
     "field" : "InvoicePeriod.DescriptionCode",
@@ -987,6 +991,10 @@
     "field" : "InvoiceLine[%d].Item.CommodityClassification.CommodityCode",
     "message" : "Invalid Item type"
   },
+  "/invoiceLine/%d/item/commodityClassification.natureCode|required": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.NatureCode",
+    "message" : "Type of goods or services subject to RCM is mandatory when Invoiced tax category code is Reverse charge"
+  },
   "/invoiceLine/%d/item/commodityClassification/natureCode|enum": {
     "field" : "InvoiceLine[%d].Item.CommodityClassification.NatureCode",
     "message" : "Invalid Type of goods or services subject to RCM"
@@ -1207,6 +1215,10 @@
     "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory",
     "message" : "Please provide at least on Tax detail"
   },
+  "/invoiceLine/%d/item/classifiedTaxCategory|maxItems": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory",
+    "message" : "Exactly one tax breakdown should be there for Tax categories Zero rated, Exempt from tax, Not Subject to Tax"
+  },
   "/invoiceLine/%d/item/classifiedTaxCategory/%d.id|required": {
     "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].ID",
     "message" : "Tax category ID is mandatory"
@@ -1246,6 +1258,14 @@
   "/invoiceLine/%d/item/classifiedTaxCategory/%d/taxExemptionReason|maxLength": {
     "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].TaxExemptionReason",
     "message" : "Tax Exemption Reason Can not have more than 300 characters"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d/percent|const": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].Percent",
+    "message" : "Tax rate should be 0 for Tax category 'Zero rated' and should be 5 for tax category 'Standard Rate'"
+  },
+  "/invoiceLine/%d/item/classifiedTaxCategory/%d|not": {
+    "field" : "InvoiceLine[%d].Item.ClassifiedTaxCategory[%d].Percent",
+    "message" : "Tax rate Should not be present for Tax categories 'Exempt from tax' and 'Not Subject to VAT'"
   },
   "/invoiceLine/%d/item/originCountry/identificationCode|enum": {
     "field" : "InvoiceLine[%d].Item.OriginCountry.IdentificationCode",

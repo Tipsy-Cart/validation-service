@@ -96,6 +96,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <outputDirectory>.</outputDirectory>
+                    <finalName>validation-service</finalName>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>

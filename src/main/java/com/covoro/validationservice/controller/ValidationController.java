@@ -72,7 +72,7 @@ public class ValidationController {
             throw new ValidationServiceException(ValidationServiceError.VALIDATION_SERVICE_EXCEPTION, e.getMessage());
 
         }
-        this.convertToXml(ublInvoice);
+        //this.convertToXml(ublInvoice);
         Map<String, String> errors = validationHandler.validateJson(id, json);
         if (errors.isEmpty()) {
             logger.info("XML Validation Successful");
