@@ -10,7 +10,8 @@
     },
     "issueDate": {
       "type": "string",
-      "format": "YYYY-MM-DD"
+      "format": "YYYY-MM-DD",
+      "futureDate": false
     },
     "dueDate": {
       "type": "string",
@@ -33,7 +34,7 @@
     "taxCurrencyCode": {
       "$ref": "classpath:/Schema/Invoice/Master/CurrencyCode.json"
     },
-    "taxExchangeRate": {
+    "pricingExchangeRate": {
       "type": "object",
       "properties": {
         "calculationRate": {
@@ -123,6 +124,23 @@
         "party": {
           "type": "object",
           "properties": {
+            "endpointID": {
+              "type": "object",
+              "properties": {
+                "schemeID": {
+                  "$ref": "classpath:/Schema/Invoice/Master/ElectronicAddressScheme.json"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
+                }
+              },
+              "required": [
+                "schemeID",
+                "id"
+              ]
+            },
             "postalAddress": {
               "type": "object",
               "properties": {
@@ -135,6 +153,11 @@
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 64
+                },
+                "postalZone": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
                 },
                 "countrySubentity": {
                   "type": "string",
@@ -285,6 +308,7 @@
             }
           },
           "required": [
+            "endpointID",
             "partyLegalEntity",
             "partyTaxScheme",
             "postalAddress"
@@ -332,9 +356,16 @@
                       "minLength": 1,
                       "maxLength": 300
                     }
-                  }
+                  },
+                  "required": [
+                    "id",
+                    "schemeId"
+                  ]
                 }
-              }
+              },
+              "required": [
+                "id"
+              ]
             },
             "postalAddress": {
               "type": "object",
@@ -348,6 +379,11 @@
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 64
+                },
+                "postalZone": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 300
                 },
                 "countrySubentity": {
                   "type": "string",
@@ -440,8 +476,7 @@
                 }
               },
               "required": [
-                "registrationName",
-                "companyID"
+                "registrationName"
               ]
             }
           },
@@ -596,7 +631,7 @@
                 "postalZone": {
                   "type": "string",
                   "minLength": 1,
-                  "maxLength": 10
+                  "maxLength": 300
                 },
                 "countrySubentity": {
                   "type": "string",
@@ -854,8 +889,7 @@
                   }
                 },
                 "required": [
-                  "id",
-                  "percent"
+                  "id"
                 ]
               },
               "allOf": [
@@ -924,7 +958,11 @@
                     "taxCategory": {
                       "properties": {
                         "id": {
-                          "enum": ["Z","E","O"]
+                          "enum": [
+                            "Z",
+                            "E",
+                            "O"
+                          ]
                         }
                       }
                     }
@@ -1210,9 +1248,15 @@
                         "minLength": 1,
                         "maxLength": 15
                       }
-                    }
+                    },
+                    "required": [
+                      "id"
+                    ]
                   }
-                }
+                },
+                "required": [
+                  "id"
+                ]
               },
               "originCountry": {
                 "type": "object",
@@ -1237,11 +1281,40 @@
                       "code": {
                         "$ref": "classpath:/Schema/Invoice/Master/ItemClassification.json"
                       }
-                    }
+                    },
+                    "required": [
+                      "code"
+                    ]
                   }
                 },
                 "required": [
                   "commodityCode"
+                ],
+                "allOf": [
+                  {
+                    "if": {
+                      "commodityCode": {
+                        "const": "G"
+                      }
+                    },
+                    "then": {
+                      "required": [
+                        "itemClassificationCode"
+                      ]
+                    }
+                  },
+                  {
+                    "if": {
+                      "commodityCode": {
+                        "const": "G"
+                      }
+                    },
+                    "then": {
+                      "required": [
+                        "itemClassificationCode"
+                      ]
+                    }
+                  }
                 ]
               },
               "classifiedTaxCategory": {
@@ -1340,6 +1413,27 @@
                   ]
                 }
               },
+              "additionalItemIdentification": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ]
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
               "additionalItemProperty": {
                 "type": "array",
                 "items": {
@@ -1355,7 +1449,11 @@
                       "minLength": 1,
                       "maxLength": 300
                     }
-                  }
+                  },
+                  "required": [
+                    "name",
+                    "value"
+                  ]
                 }
               }
             },
@@ -1387,7 +1485,10 @@
                         "natureCode"
                       ]
                     }
-                  }
+                  },
+                  "required": [
+                    "standardItemIdentification"
+                  ]
                 }
               },
               {
@@ -1414,6 +1515,24 @@
                       "maxItems": 1
                     }
                   }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "commodityClassification": {
+                      "properties": {
+                        "commodityCode": {
+                          "const": "B"
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "additionalItemIdentification"
+                  ]
                 }
               }
             ]
@@ -1541,10 +1660,10 @@
       },
       "then": {
         "required": [
-          "taxExchangeRate"
+          "pricingExchangeRate"
         ],
         "properties": {
-          "taxExchangeRate": {
+          "pricingExchangeRate": {
             "required": [
               "calculationRate"
             ]
@@ -1563,11 +1682,11 @@
       "then": {
         "not": {
           "required": [
-            "taxExchangeRate"
+            "pricingExchangeRate"
           ]
         },
         "properties": {
-          "taxExchangeRate": {
+          "pricingExchangeRate": {
             "not": {
               "required": [
                 "calculationRate"
@@ -1745,8 +1864,10 @@
     },
     {
       "if": {
-        "profileExecutionID": {
-          "const": "00010000"
+        "properties": {
+          "profileExecutionID": {
+            "const": "00010000"
+          }
         }
       },
       "then": {
@@ -1757,14 +1878,131 @@
     },
     {
       "if": {
-        "invoiceTypeCode": {
-          "const": "381"
+        "properties": {
+          "invoiceTypeCode": {
+            "const": "381"
+          }
         }
       },
       "then": {
         "required": [
           "discrepancyResponse",
           "billingReference"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profileExecutionID": {
+            "const": "00010000"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "invoicePeriod"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "invoiceTypeCode": {
+            "enum": [
+              "480",
+              "81"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "profileExecutionID": {
+            "not": {
+              "enum": [
+                "00010000",
+                "01000000",
+                "00100000"
+              ]
+            }
+          },
+          "accountingCustomerParty": {
+            "properties": {
+              "partyLegalEntity": {
+                "required": [
+                  "companyID"
+                ]
+              }
+            }
+          },
+          "invoiceLine": {
+            "properties": {
+              "item": {
+                "properties": {
+                  "classifiedTaxCategory": {
+                    "contains": {
+                      "properties": {
+                        "id": {
+                          "enum": [
+                            "E",
+                            "O",
+                            "Z"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "profileExecutionID": {
+            "not": {
+              "const": "00000001"
+            }
+          },
+          "accountingCustomerParty": {
+            "properties": {
+              "party": {
+                "properties": {
+                  "endpointID": {
+                    "properties": {
+                      "schemeID": {
+                        "const": "0235"
+                      },
+                      "id": {
+                        "pattern": "^[^1][A-Za-z0-9]*$\n"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "anyOf": [
+          {
+            "properties": {
+              "accountingCustomerParty": {
+                "properties": {
+                  "party": {
+                    "required": [
+                      "partyIdentification"
+                    ]
+                  }
+                }
+              }
+            }
+          }
         ]
       }
     }

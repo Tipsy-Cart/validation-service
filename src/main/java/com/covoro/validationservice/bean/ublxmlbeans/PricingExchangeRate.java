@@ -12,16 +12,18 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "TaxExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
-public class TaxExchangeRate {
+@XmlRootElement(name = "PricingExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+public class PricingExchangeRate {
 
     @JacksonXmlProperty(localName = "CalculationRate", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "CalculationRate", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
-    private Double calculationRate;
+    private BigDecimal calculationRate;
 
 }

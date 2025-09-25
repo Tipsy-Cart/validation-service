@@ -54,6 +54,7 @@ public class JsonSchemaManager {
                     .build();
             JsonMetaSchema metaSchema = JsonMetaSchema.builder(JsonMetaSchema.getV202012())
                     .format(new DateFormatValidator())
+                    .keyword(new FutureDate())
                     .build();
             JsonSchemaFactory jsonSchemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V202012, builder -> builder.metaSchema(metaSchema));
             return jsonSchemaFactory.getSchema(schemaStream, config);

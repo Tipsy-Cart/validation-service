@@ -17,7 +17,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +47,7 @@ public class ValidationController {
             logger.info("JSON Validation Successful");
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
         } else {
-            throw new ValidationServiceException(ValidationServiceError.JSON_VALIDATION_ERROR, errors);
+            throw new ValidationServiceException(ValidationServiceError.VALIDATION_ERROR, errors);
         }
     }
 
@@ -67,6 +66,7 @@ public class ValidationController {
             ublInvoice = xmlMapper.readValue(xml, Invoice.class);
             defaultValueHelper.add(ublInvoice);
             json = mapper.writeValueAsString(ublInvoice);
+            System.out.println(json);
         } catch (JsonProcessingException e) {
             logger.trace("Exception While Converting XML to POJO ", e);
             throw new ValidationServiceException(ValidationServiceError.VALIDATION_SERVICE_EXCEPTION, e.getMessage());
@@ -74,6 +74,7 @@ public class ValidationController {
         }
         //this.convertToXml(ublInvoice);
         Map<String, String> errors = validationHandler.validateJson(id, json);
+        validationHandler.validateDrool(id, List.of("InvoiceLine","Invoice","Tax"),json);
         if (errors.isEmpty()) {
             logger.info("XML Validation Successful");
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
@@ -96,7 +97,7 @@ public class ValidationController {
                 message = String.format(message, a,b);
                 errors.put("AccountingSupplierParty.Party.PartyLegalEntity.CompanyID.schemeAgencyName", message);
             }
-            throw new ValidationServiceException(ValidationServiceError.JSON_VALIDATION_ERROR, errors);
+            throw new ValidationServiceException(ValidationServiceError.VALIDATION_ERROR, errors);
         }
     }
 
@@ -137,7 +138,7 @@ public class ValidationController {
             logger.info("Drool Validation Successful");
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
         } else {
-            throw new ValidationServiceException(ValidationServiceError.JSON_VALIDATION_ERROR, errors);
+            throw new ValidationServiceException(ValidationServiceError.VALIDATION_ERROR, errors);
         }
     }
 
@@ -145,5 +146,23 @@ public class ValidationController {
     public ResponseEntity<ApiResponse> relaodJsonSchema(@PathVariable String id) {
         this.validationHandler.reloadJsonSchema(id);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
+    }
+
+    @Operation(summary = "Validate Invoice")
+    @PostMapping("${api.validation-service.validation.validate-invoice.POST.uri}")
+    public ResponseEntity<ApiResponse> validateInvoice(@PathVariable String id,
+                                                    @RequestBody String json) {
+        logger.info("Start JSON Validation");
+        Map<String, String> errors = validationHandler.validateJson(id, json);
+        if (errors.isEmpty()) {
+            logger.info("JSON Validation Successful, Validating Drool");
+            errors = validationHandler.validateDrool(id + "WithLog", List.of("InvoiceLine", "Invoice", "Tax"), json);
+        }
+        if (errors.isEmpty()) {
+            logger.info("Validation Successful");
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse().setStatus(AppConstant.STATUS_SUCCESS));
+        } else {
+            throw new ValidationServiceException(ValidationServiceError.VALIDATION_ERROR, errors);
+        }
     }
 }

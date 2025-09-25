@@ -31,6 +31,10 @@
     "field" : "IssueDate",
     "message" : "Issue date must be valid date in YYYY-MM-DD format"
   },
+  "/issueDate|futureDate": {
+    "field" : "IssueDate",
+    "message" : "Issue date can not be future date"
+  },
   ".dueDate|required": {
     "field" : "DueDate",
     "message" : "Payment due date is required when amount due for payment is greater than 0"
@@ -55,6 +59,10 @@
     "field" : "ProfileExecutionID",
     "message" : "Invalid Invoice Transaction Type"
   },
+  "/profileExecutionID|not": {
+    "field" : "ProfileExecutionID",
+    "message" : "Invoice Transaction-type code cannot be Summary invoice or Deemed supply or Margin scheme When the invoice type code is Out of scope of tax or Credit note related to goods or services"
+  },
   ".documentCurrencyCode|required": {
   "field" : "DocumentCurrencyCode",
   "message" : "Document Currency Code is Mandatory"
@@ -63,28 +71,28 @@
     "field" : "DocumentCurrencyCode",
     "message" : "Invalid Document Currency Code"
   },
-  "/taxExchangeRate|not": {
-    "field" : "TaxExchangeRate",
-    "message" : "TaxExchangeRate is not required when Document Currency Code is AED"
+  "/pricingExchangeRate|not": {
+    "field" : "pricingExchangeRate",
+    "message" : "pricingExchangeRate is not required when Document Currency Code is AED"
   },
-  ".taxExchangeRate|required": {
-    "field" : "TaxExchangeRate",
-    "message" : "TaxExchangeRate is Mandatory when Document Currency Code is not AED"
+  ".pricingExchangeRate|required": {
+    "field" : "pricingExchangeRate",
+    "message" : "pricingExchangeRate is Mandatory when Document Currency Code is not AED"
   },
-  "/taxExchangeRate.calculationRate|required": {
-    "field" : "TaxExchangeRate.CalculationRate",
+  "/pricingExchangeRate.calculationRate|required": {
+    "field" : "pricingExchangeRate.CalculationRate",
     "message" : "CalculationRate is Mandatory when Document Currency Code is not AED"
   },
-  "/taxExchangeRate/calculationRate|minimum": {
-    "field" : "TaxExchangeRate.CalculationRate",
+  "/pricingExchangeRate/calculationRate|minimum": {
+    "field" : "pricingExchangeRate.CalculationRate",
     "message" : "CalculationRate value cannot be less than 0"
   },
-  "/taxExchangeRate/calculationRate|maximum": {
-    "field" : "TaxExchangeRate.CalculationRate",
+  "/pricingExchangeRate/calculationRate|maximum": {
+    "field" : "pricingExchangeRate.CalculationRate",
     "message" : "CalculationRate value cannot be more than 1,000,000"
   },
-  "/taxExchangeRate/calculationRate|multipleOf": {
-    "field" : "TaxExchangeRate.CalculationRate",
+  "/pricingExchangeRate/calculationRate|multipleOf": {
+    "field" : "pricingExchangeRate.CalculationRate",
     "message" : "CalculationRate value can have maximum 6 decimal places values"
   },
   ".billingReference|required": {
@@ -166,6 +174,30 @@
   "/accountingSupplierParty.party|required": {
     "field" : "AccountingSupplierParty.Party",
     "message" : "Seller Detail is Mandatory"
+  },
+  "/accountingSupplierParty/party.endpointID|required": {
+    "field" : "AccountingSupplierParty.Party.EndpointID",
+    "message" : "Seller  electronic address is Mandatory"
+  },
+  "/accountingSupplierParty/party/endpointID.id|required": {
+    "field" : "AccountingSupplierParty.Party.EndpointID",
+    "message" : "Seller electronic address can not be empty"
+  },
+  "/accountingSupplierParty/party/endpointID/id|minLength": {
+    "field" : "AccountingSupplierParty.Party.EndpointID",
+    "message" : "Seller electronic address can not be empty"
+  },
+  "/accountingSupplierParty/party/endpointID/id|maxLength": {
+    "field" : "AccountingSupplierParty.Party.EndpointID",
+    "message" : "Seller electronic address can not be more than 300 characters"
+  },
+  "/accountingSupplierParty/party/endpointID.schemeID|required": {
+    "field" : "AccountingSupplierParty.Party.EndpointID.schemeId",
+    "message" : "Seller electronic address scheme is Mandatory"
+  },
+  "/accountingSupplierParty/party/endpointID/schemeID|enum": {
+    "field" : "AccountingSupplierParty.Party.EndpointID.schemeId",
+    "message" : "Invalid Seller electronic address scheme "
   },
   "/accountingSupplierParty/party.partyLegalEntity|required": {
     "field" : "AccountingSupplierParty.Party.PartyLegalEntity",
@@ -251,6 +283,14 @@
     "field" : "AccountingSupplierParty.Party.PostalAddress.CityName",
     "message" : "Seller City name can not be more than 64 characters long"
   },
+  "/accountingSupplierParty/party/postalAddress/postalZone|minLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.PostalZone",
+    "message" : "Seller Post Code Can not be Empty"
+  },
+  "/accountingSupplierParty/party/postalAddress/postalZone|maxLength": {
+    "field" : "AccountingSupplierParty.Party.PostalAddress.PostalZone",
+    "message" : "Seller Post Code Can not be more than 300 characters long"
+  },
   "/accountingSupplierParty/party/postalAddress.countrySubentity|required": {
     "field" : "AccountingSupplierParty.Party.PostalAddress.CountrySubentity",
     "message" : "Seller Country Sub Division is Mandatory"
@@ -309,7 +349,7 @@
   },
   "/accountingCustomerParty/party/partyLegalEntity/companyID.id|required": {
     "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID",
-    "message" : "Buyer legal registration identifier is Mandatory"
+    "message" : "Buyer legal registration identifier is Mandatory when Invoice type code is Out of scope of tax or Credit note related to goods or services"
   },
   "/accountingCustomerParty/party/partyLegalEntity/companyID/id|minLength": {
     "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID",
@@ -326,6 +366,10 @@
   "/accountingCustomerParty/party/partyLegalEntity/companyID/schemeAgencyID|enum": {
     "field" : "AccountingCustomerParty.Party.PartyLegalEntity.CompanyID.schemeAgencyID",
     "message" : "Invalid Buyer legal registration identifier type"
+  },
+  "/accountingCustomerParty/party/partyIdentification/id.schemeId|required": {
+    "field" : "AccountingCustomerParty.Party.PartyIdentification.ID.schemeId",
+    "message" : "Buyer Scheme identifier is mandatory"
   },
   "/accountingCustomerParty/party/partyIdentification/id/schemeId|enum": {
     "field" : "AccountingCustomerParty.Party.PartyIdentification.ID.schemeId",
@@ -402,6 +446,14 @@
   "/accountingCustomerParty/party/postalAddress/cityName|maxLength": {
     "field" : "AccountingCustomerParty.Party.PostalAddress.CityName",
     "message" : "Buyer City name can not be more than 64 characters long"
+  },
+  "/accountingCustomerParty/party/postalAddress/postalZone|minLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.PostalZone",
+    "message" : "Buyer Post Code Can not be Empty"
+  },
+  "/accountingCustomerParty/party/postalAddress/postalZone|maxLength": {
+    "field" : "AccountingCustomerParty.Party.PostalAddress.PostalZone",
+    "message" : "Buyer Post Code Can not be more than 300 characters long"
   },
   "/accountingCustomerParty/party/postalAddress.countrySubentity|required": {
     "field" : "AccountingCustomerParty.Party.PostalAddress.CountrySubentity",
@@ -501,7 +553,7 @@
   },
   "/delivery/deliveryLocation/address/postalZone|maxLength": {
     "field" : "Delivery.DeliveryLocation.Address.PostalZone",
-    "message" : "Delivery Post Code Can not be more than 10 characters long"
+    "message" : "Delivery Post Code Can not be more than 300 characters long"
   },
   "/delivery/deliveryLocation/address.countrySubentity|required": {
     "field" : "Delivery.DeliveryLocation.Address.CountrySubentity",
@@ -999,16 +1051,32 @@
     "field" : "InvoiceLine[%d].Item.CommodityClassification.NatureCode",
     "message" : "Invalid Type of goods or services subject to RCM"
   },
-  "/invoiceLine/%d/item/standardItemIdentification/id|minLength": {
+  "/invoiceLine/%d/item.standardItemIdentification|required": {
+    "field" : "InvoiceLine[%d].Item.StandardItemIdentification",
+    "message" : "Item standard identifier is mandatory when one of tax category is reverse charge"
+  },
+  "/invoiceLine/%d/item/standardItemIdentification.id|required": {
+    "field" : "InvoiceLine[%d].Item.StandardItemIdentification.ID",
+    "message" : "Item standard identifier is mandatory when one of tax category is reverse charge"
+  },
+  "/invoiceLine/%d/item/standardItemIdentification/id.id|required": {
     "field" : "InvoiceLine[%d].Item.StandardItemIdentification.ID",
     "message" : "Item standard identifier can not be empty"
   },
-  "/invoiceLine/%d/item/standardItemIdentification/id|maxLength": {
+  "/invoiceLine/%d/item/standardItemIdentification/id/id|maxLength": {
     "field" : "InvoiceLine[%d].Item.StandardItemIdentification.ID",
     "message" : "Item standard identifier can not be longer than 15 characters"
   },
+  "/invoiceLine/%d/item/commodityClassification.itemClassificationCode|required": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.ItemClassificationCode",
+    "message" : "Item classification identifier is required is Item type is Goods"
+  },
+  "/invoiceLine/%d/item/commodityClassification/itemClassificationCode.code|required": {
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.ItemClassificationCode",
+    "message" : "Item classification identifier is required is Item type is Goods"
+  },
   "/invoiceLine/%d/item/commodityClassification/itemClassificationCode/code|enum": {
-    "field" : "InvoiceLine[%d].Item.CommodityClassification.NatureCode",
+    "field" : "InvoiceLine[%d].Item.CommodityClassification.ItemClassificationCode",
     "message" : "Invalid Item classification identifier"
   },
   "/invoiceLine/%d.price|required": {
@@ -1271,6 +1339,26 @@
     "field" : "InvoiceLine[%d].Item.OriginCountry.IdentificationCode",
     "message" : "Invalid origin country code"
   },
+  "/invoiceLine/%d/item.additionalItemIdentification|required": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemIdentification",
+    "message" : "Service Accounting Code is mandatory when item Type is Both"
+  },
+  "/invoiceLine/%d/item/additionalItemIdentification.id|required": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemIdentification.ID",
+    "message" : "Service Accounting Code is mandatory when item Type is Both"
+  },
+  "/invoiceLine/%d/item/additionalItemIdentification/id.id|required": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemIdentification.ID",
+    "message" : "Service Accounting Code can not be empty"
+  },
+  "/invoiceLine/%d/item/additionalItemIdentification/id/id|maxLength": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemIdentification.ID",
+    "message" : "Service Accounting Code can not be more than 10 characters long"
+  },
+  "/invoiceLine/%d/item/additionalItemProperty/%d.name|required": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Name",
+    "message" : "Both name and value are mandatory when Item Attribute is provided"
+  },
   "/invoiceLine/%d/item/additionalItemProperty/%d/name|minLength": {
     "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Name",
     "message" : "Item Attribute name can not be empty"
@@ -1278,6 +1366,10 @@
   "/invoiceLine/%d/item/additionalItemProperty/%d/name|maxLength": {
     "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Name",
     "message" : "Item Attribute name can not have more than 300 characters"
+  },
+  "/invoiceLine/%d/item/additionalItemProperty/%d.value|required": {
+    "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Value",
+    "message" : "Both name and value are mandatory when Item Attribute is provided"
   },
   "/invoiceLine/%d/item/additionalItemProperty/%d/value|minLength": {
     "field" : "InvoiceLine[%d].Item.AdditionalItemProperty[%d].Value",
@@ -1341,7 +1433,7 @@
   },
   "/discrepancyResponse.responseCode|required": {
     "field" : "DiscrepancyResponse.ResponseCode",
-    "message" : "Credit note reason code is mandatory for Credit Note"
+    "message" : "Credit note reason code is mandatory if Discrepancy Response is provided"
   },
   "/discrepancyResponse/responseCode|enum": {
     "field" : "DiscrepancyResponse.ResponseCode",

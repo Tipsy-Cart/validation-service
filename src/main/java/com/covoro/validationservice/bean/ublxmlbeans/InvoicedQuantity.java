@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.xml.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
@@ -24,6 +26,6 @@ public class InvoicedQuantity {
 
     @JacksonXmlText
     @XmlValue
-    private Double quantity;
+    private BigDecimal quantity;
 
 }

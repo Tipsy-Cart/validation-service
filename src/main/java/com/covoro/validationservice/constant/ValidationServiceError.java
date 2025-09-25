@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public enum ValidationServiceError {
-    JSON_VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "VS-400", "Json Schema Validation Failed"),
+    VALIDATION_ERROR(HttpStatus.BAD_REQUEST, "VS-400", "Validation Failed"),
     SQL_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "VS-100", "Database Error"),
     VALIDATION_SERVICE_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "VS-500", "Validation Service Exception");
 

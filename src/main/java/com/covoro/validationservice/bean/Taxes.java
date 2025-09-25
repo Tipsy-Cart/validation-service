@@ -9,7 +9,9 @@ public class Taxes {
     private final Map<String, BigDecimal> taxMap = new HashMap<>();
 
     public void put(String taxCategory, BigDecimal taxRate, BigDecimal taxableAmount) {
-        String key = taxCategory + "#"  + taxRate;
+        String key = taxCategory;
+        if(null != taxRate)
+            key = key + "#" + taxRate;
         if(null == taxMap.get(key)) {
             taxMap.put(key, taxableAmount);
         } else {

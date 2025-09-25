@@ -30,4 +30,5 @@ public class AddressLine {
     @JacksonXmlProperty(localName = "Line", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "Line", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     private String line;
+
 }

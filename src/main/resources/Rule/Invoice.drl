@@ -52,7 +52,7 @@ when
     $netAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.lineExtensionAmount.amount")
     $taxCategory : String() from jsonHelper.read($taxCtx, "$.id")
     $taxRate : BigDecimal() from jsonHelper.readBigDecimal($taxCtx, "$.percent")
-    $taxSubTotal : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.taxTotal.taxSubtotal[?(@.taxCategory.id == '" + $taxCategory + "' && @.taxCategory.percent == " + $taxRate + ")]"))
+    $taxSubTotal : List() from collect (Object() from jsonHelper.readTaxList($invoiceCtx, $taxCategory ,$taxRate ))
     eval($taxSubTotal.size() != 1)
 then
     results.add("InvoiceLine[" + $itemIndex + "].Item.ClassifiedTaxCategory[" + $taxIndex +"] ", "Tax Category not present in Tax Subtotal List");
@@ -113,15 +113,18 @@ end
 rule "Line Item Total Tax Amount"
 agenda-group "InvoiceLine"
 when
+    $invoiceCtx : DocumentContext()
     $itemFact : JsonFact(type == "LineItem")
     $itemCtx : DocumentContext() from $itemFact.getContext()
     $itemIndex : Integer() from $itemFact.getIndex()
     $taxList : List() from collect (Object() from jsonHelper.readList($itemCtx, "$.item.classifiedTaxCategory[*].percent"))
     $totalTaxPercent : BigDecimal() from jsonHelper.sum($taxList)
+    $calculationRate: BigDecimal() from jsonHelper.getCalculationRate($invoiceCtx, "$.pricingExchangeRate.calculationRate")
     $netAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.lineExtensionAmount.amount")
     $totalTaxAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.itemPriceExtension.taxTotal.taxAmount.amount")
     $calculatedTotalTaxAmount : BigDecimal() from jsonHelper.multiply($netAmount, $totalTaxPercent/100)
-    eval(!jsonHelper.equals($totalTaxAmount, $calculatedTotalTaxAmount))
+    $calculatedTotalTaxAmountInAED : BigDecimal() from jsonHelper.multiply($calculatedTotalTaxAmount, $calculationRate)
+    eval(!jsonHelper.equals($totalTaxAmount, $calculatedTotalTaxAmountInAED))
 then
    results.add("InvoiceLine[" + $itemIndex + "].ItemPriceExtension.TaxTotal.TaxAmount", "Total tax Amount does not match the calculated value (Net Amount * Sum of all tax rate / 100)");
 end
@@ -129,13 +132,16 @@ end
 rule "Line Item Net Amount With Tax"
 agenda-group "InvoiceLine"
 when
+    $invoiceCtx : DocumentContext()
     $itemFact : JsonFact(type == "LineItem")
     $itemCtx : DocumentContext() from $itemFact.getContext()
     $itemIndex : Integer() from $itemFact.getIndex()
     $netAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.lineExtensionAmount.amount")
+    $calculationRate: BigDecimal() from jsonHelper.getCalculationRate($invoiceCtx, "$.pricingExchangeRate.calculationRate")
+    $netAmountInAED : BigDecimal() from jsonHelper.multiply($netAmount, $calculationRate)
     $totalTaxAmount : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.itemPriceExtension.taxTotal.taxAmount.amount")
     $netAmountWithTax : BigDecimal() from jsonHelper.readBigDecimal($itemCtx,"$.itemPriceExtension.amount.amount")
-    $calculatedNetAmountWithTax : BigDecimal() from jsonHelper.add($netAmount, $totalTaxAmount)
+    $calculatedNetAmountWithTax : BigDecimal() from jsonHelper.add($netAmountInAED, $totalTaxAmount)
     eval(!jsonHelper.equals($netAmountWithTax, $calculatedNetAmountWithTax))
 then
    results.add("InvoiceLine[" + $itemIndex + "].ItemPriceExtension.Amount", "Net Amount with tax does not match the calculated value (Net Amount + Total tax amount)");
@@ -157,7 +163,7 @@ rule "Invoice Charges"
 agenda-group "Invoice"
 when
     $invoiceCtx : DocumentContext()
-    $chargeList : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.allowanceCharge[?(@.chargeIndicator == true)].amount.amount"))
+    $chargeList : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.allowanceCharges[?(@.chargeIndicator == true)].amount.amount"))
     $calculatedTotalCharge : BigDecimal() from jsonHelper.sum($chargeList)
     $invoiceTotalCharge : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.chargeTotalAmount.amount")
     eval(!jsonHelper.equals($invoiceTotalCharge, $calculatedTotalCharge))
@@ -169,7 +175,7 @@ rule "Invoice Discount"
 agenda-group "Invoice"
 when
     $invoiceCtx : DocumentContext()
-    $allowanceList : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.allowanceCharge[?(@.chargeIndicator == false)].amount.amount"))
+    $allowanceList : List() from collect (Object() from jsonHelper.readList($invoiceCtx, "$.allowanceCharges[?(@.chargeIndicator == false)].amount.amount"))
     $calculatedTotalAllowance : BigDecimal() from jsonHelper.sum($allowanceList)
     $invoiceTotalAllowance : BigDecimal() from jsonHelper.readBigDecimal($invoiceCtx,"$.legalMonetaryTotal.allowanceTotalAmount.amount")
     eval(!jsonHelper.equals($invoiceTotalAllowance, $calculatedTotalAllowance))

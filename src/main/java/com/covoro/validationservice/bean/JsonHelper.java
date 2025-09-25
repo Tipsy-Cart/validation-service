@@ -14,13 +14,39 @@ public class JsonHelper {
         return result;
     }
 
+    public List readTaxList(DocumentContext context, String taxCategory, BigDecimal taxRate){
+        String path = "";
+        if("E".equals(taxCategory) || "O".equals(taxCategory))
+            path = "$.taxTotal.taxSubtotal[?(@.taxCategory.id == '" + taxCategory + "')]";
+        else
+            path = "$.taxTotal.taxSubtotal[?(@.taxCategory.id == '" + taxCategory + "' && @.taxCategory.percent == " + taxRate + ")]";
+        List result = context.read(path);
+        return result;
+    }
+
     public String read(DocumentContext context, String path){
         return context.read(path, String.class);
     }
 
     public BigDecimal readBigDecimal(DocumentContext context, String path){
-        BigDecimal value = context.read(path, BigDecimal.class);
+        BigDecimal value = null;
+        try {
+            value = context.read(path, BigDecimal.class);
+        } catch (Exception e) {
+
+        }
         value = null != value ? value : BigDecimal.ZERO;
+        return value.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public BigDecimal getCalculationRate(DocumentContext context, String path){
+        BigDecimal value = null;
+        try {
+            value = context.read(path, BigDecimal.class);
+        } catch (Exception e) {
+
+        }
+        value = null != value ? value : new BigDecimal(1);
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 

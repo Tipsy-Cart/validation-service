@@ -1,7 +1,6 @@
 package com.covoro.validationservice.bean.ublxmlbeans;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -12,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -87,9 +85,9 @@ public class Invoice {
     @XmlElement(name = "TaxCurrencyCode", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     private String taxCurrencyCode;
 
-    @JacksonXmlProperty(localName = "TaxExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
-    @XmlElement(name = "TaxExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
-    private TaxExchangeRate taxExchangeRate;
+    @JacksonXmlProperty(localName = "PricingExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    @XmlElement(name = "PricingExchangeRate", namespace = Namespaces.COMMON_AGGREGATE_COMPONENT_2)
+    private PricingExchangeRate pricingExchangeRate;
 
     @JacksonXmlProperty(localName = "AccountingCost", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
     @XmlElement(name = "AccountingCost", namespace = Namespaces.COMMON_BASIC_COMPONENT_2)
